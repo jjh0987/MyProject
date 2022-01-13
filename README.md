@@ -2,7 +2,7 @@
 
 
 
-## 1.Contents of python project
+## 1. Contents of python project
 
 - [백준알고리즘](https://www.acmicpc.net/)
 - [CSES](https://cses.fi/problemset/)
