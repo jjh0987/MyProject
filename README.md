@@ -14,3 +14,5 @@
 - DL - Deep Learning from Scratch
 - FDL - Fundamental of Deep Learning
 - LT - Learning Tensorflow
+
+- email config
