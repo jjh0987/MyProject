@@ -29,3 +29,10 @@ for i in target:
     else:
         break
 print(cnt)
+
+N = int(input())
+five_line = [5 ** i for i in range(1, 14)]
+five1 = 0
+for i in five_line:
+    five1 += N//i
+print(five1)
