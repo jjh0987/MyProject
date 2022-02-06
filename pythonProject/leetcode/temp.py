@@ -1,27 +1,61 @@
 class Solution(object):
-    def twoSum(self, nums, target):
-        s_nums = nums
-        ans = []
-        k = -1
-        for j in range(len(s_nums)-1,0,-1):
-            for i in range(len(s_nums)+k):
-                if s_nums[j]+s_nums[i] == target:
-                    if s_nums[j] == s_nums[i]:
-                        temp = s_nums[i]
-                        ans.append(s_nums.index(temp))
-                        s_nums.pop(s_nums.index(temp))
-                        ans.append(s_nums.index(temp)+1)
-                        break
-                    ans.append(s_nums.index(s_nums[i]))
-                    ans.append(s_nums.index(s_nums[j]))
-                    break
-            k -= 1
-            if len(ans) == 2:
+    def mergeKLists(self, lists):
+        while len(lists) != 1:
+            i = 0
+            while i < len(lists)//2:
+                lists[i] = Solution().TwoListMerge(lists[2*i],lists[2*i+1])
+                i += 1
+            for x in range(len(lists)//2):
+                if len(lists[2*x+1]) == 0:
+                    lists.pop(2*x+1)
+
+        return lists[0]
+
+    def TwoListMerge(self,list1,list2):
+        merge = []
+        while 1:
+            try:
+                if list1[0] <= list2[0]:
+                    merge.append(list1.pop(0))
+                else:
+                    merge.append(list2.pop(0))
+            except:
                 break
-        return ans
+        for _ in range(len(list1)):
+            merge.append(list1.pop(0))
+        for _ in range(len(list2)):
+            merge.append(list2.pop(0))
+        return merge
+
+
+Solution().mergeKLists([[1,4,5],[1,3,4],[2,6]])
 
 
 class Solution(object):
-    def twoSum(self, nums, target):
+    def mergeKLists(self, lists):
+        while len(lists) != 1:
+            i = 0
+            while i < len(lists)//2:
+                lists[i] = Solution().TwoListMerge(lists[2*i],lists[2*i+1])
+                i += 1
+            for x in range(len(lists)//2):
+                if len(lists[2*x+1]) == 0:
+                    lists.pop(2*x+1)
 
-        return 
+        return lists[0]
+
+    def TwoListMerge(self,list1,list2):
+        merge = []
+        while 1:
+            try:
+                if list1[0] <= list2[0]:
+                    merge.append(list1.pop(0))
+                else:
+                    merge.append(list2.pop(0))
+            except:
+                break
+        for _ in range(len(list1)):
+            merge.append(list1.pop(0))
+        for _ in range(len(list2)):
+            merge.append(list2.pop(0))
+        return merge
