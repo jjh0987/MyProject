@@ -66,5 +66,21 @@ import sys
 import heapq
 input = sys.stdin.readline
 n = int(input())
-min_h = []
-max_h = []
+h1 = []
+h2 = []
+for _ in range(n):
+    target = int(input())
+    heapq.heappush(h1,target)
+    if len(h1) != len(h2):
+        heapq.heappush(h2,-heapq.heappop(h1))
+        try:
+            if h1[0] < -h2[0]:
+                heapq.heappush(h1, -heapq.heappop(h2))
+                heapq.heappush(h2, -heapq.heappop(h1))
+        except:pass
+    else:
+        if h1[0] < -h2[0]:
+            heapq.heappush(h1,-heapq.heappop(h2))
+            heapq.heappush(h2,-heapq.heappop(h1))
+
+    print(-h2[0])

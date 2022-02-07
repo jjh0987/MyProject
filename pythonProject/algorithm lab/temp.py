@@ -27,4 +27,4 @@ ans.reverse()
 print(*ans)
 
 
-
+# 1874 
