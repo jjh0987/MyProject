@@ -17,4 +17,4 @@ while 1:
         queue.append(queue.popleft())
     ans += str(queue.popleft())+' '
 
-# test case : 123456 666666
+# test case : 123456 666666 : fail
