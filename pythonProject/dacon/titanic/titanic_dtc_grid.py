@@ -29,8 +29,8 @@ def devide_train_xy(df,target):
     return x_train,y_train
 
 def setting_test(df,target):
-    x_test = df.fillna(df['Age'].mean())
-    x_test = drop_features(x_test,target)
+    x_test = drop_features(df,target)
+    x_test = x_test.fillna(x_test['Fare'].mean())
     return x_test
 
 def submission_DF(pred,len_train,len_test):
@@ -56,6 +56,7 @@ encode_target = ['Sex','Embarked']
 titanic_train,titanic_test = load_datasets()
 
 titanic_train.info()
+titanic_test.info()
 
 train_set = drop_features(titanic_train,drop_target)
 x_train,y_train = devide_train_xy(train_set,'Survived')
@@ -63,9 +64,9 @@ x_train = encoder(x_train,encode_target)
 x_test = setting_test(titanic_test,drop_target)
 x_test = encoder(x_test,encode_target)
 
-
+x_train = x_train.dropna()
 # x_train['Age'] = x_train['Age'].fillna(x_train['Age'].mean())
-x_train['Embarked'] = x_train['Embarked'].fillna(x_train['Embarked'].mean())
+# x_train['Embarked'] = x_train['Embarked'].fillna(x_train['Embarked'].mean())
 
 x_test.info()
 x_train.info()
@@ -190,16 +191,13 @@ X_train,X_test,Y_train,Y_test = train_test_split(
 model = Sequential()
 initializer = tf.keras.initializers.HeNormal()
 model.add(Dense(10,activation='sigmoid',kernel_initializer=initializer))
-
-model.add(Dense(12,activation='sigmoid'))
-model.add(Dense(8,activation='relu'))
-model.add(Dense(5,activation='sigmoid'))
+model.add(Dense(4,activation='relu'))
 
 model.add(Dense(1,activation='softmax'))
 
 opt = tf.keras.optimizers.Adam(lr=0.01)
 model.compile(loss='binary_crossentropy',optimizer=opt,metrics='accuracy')
-model.fit(X_train,Y_train,epochs=100,batch_size=30)
+model.fit(X_train,Y_train,epochs=20,batch_size=30)
 
 pred = model.predict(X_test)
 model.evaluate(X_test,Y_test)[1]

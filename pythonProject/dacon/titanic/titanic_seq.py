@@ -1,4 +1,8 @@
 import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
 
 def load_datasets():
     path_train = '../pycharmProjects/pythonProject/dacon/titanic/train.csv'
@@ -22,14 +26,12 @@ def drop_features(data,features):
 def devide_train_xy(df,target):
     y_train = pd.DataFrame(data=df.loc[:,target],columns=[target])
     x_train = drop_features(df,target)
-    x_train = x_train.fillna(x_train['Age'].mean())
     return x_train,y_train
 
 def setting_test(df,target):
-    x_test = df.fillna(df['Age'].mean())
-    x_test = drop_features(x_test,target)
+    x_test = drop_features(df,target)
+    x_test = x_test.fillna(x_test['Fare'].mean())
     return x_test
-
 
 def submission_DF(pred,len_train,len_test):
     data = []
@@ -46,17 +48,31 @@ def submission_DF(pred,len_train,len_test):
 def write_csv(path,df):
     df.to_csv(path)
 
-drop_target = ['PassengerId','Ticket','Name','Cabin','Embarked','Parch']
-encode_target = ['Sex']
+
+# x_train = x_train.fillna(df['Age'].mean())
+
+drop_target = ['PassengerId','Ticket','Name','Cabin','Age']
+encode_target = ['Sex','Embarked']
 titanic_train,titanic_test = load_datasets()
+
+titanic_train.info()
+titanic_test.info()
+
 train_set = drop_features(titanic_train,drop_target)
-titanic_test.columns
 
 x_train,y_train = devide_train_xy(train_set,'Survived')
 x_train = encoder(x_train,encode_target)
 x_test = setting_test(titanic_test,drop_target)
 x_test = encoder(x_test,encode_target)
-idx = 700
+
+x_train.info()
+x_test.info()
+
+x_train,y_train = devide_train_xy(train_set,'Survived')
+x_train = encoder(x_train,encode_target)
+x_test = setting_test(titanic_test,drop_target)
+x_test = encoder(x_test,encode_target)
+idx = 800
 x_train_train = x_train.iloc[:idx,:]
 x_train_test = x_train.iloc[idx:,:]
 y_train_train = y_train.iloc[:idx,:]
@@ -72,38 +88,41 @@ import numpy as np
 
 model = Sequential()
 initializer = initializers.HeNormal()
-model.add(Dense(12,activation='relu',kernel_initializer=initializer))
+model.add(Dense(8,activation='relu',kernel_initializer=initializer))
 
-model.add(Dense(5,activation='sigmoid'))
+model.add(Dense(4,activation='sigmoid'))
 model.add(Dense(1,activation='sigmoid'))
 
 # RMSprop
-opt = optimizers.Adam(learning_rate=0.005)
+opt = optimizers.RMSprop(learning_rate=0.005)
 loss = losses.binary_crossentropy
 model.compile(optimizer=opt,loss=loss,metrics=['accuracy'])
-model.fit(x_train_train,y_train_train,epochs=20,batch_size=20)
+model.fit(x_train_train,y_train_train,epochs=40,batch_size=30)
 
 # pred = model.predict(x_train_test)
 
 model.evaluate(x_train_test,y_train_test)
 
 
-one_hot_pred = np.array([np.argmax(i) for i in pred])
-acc = accuracy_score(one_hot_pred,y_train_test)
-print(round(acc,4))
+# one_hot_pred = np.array([np.argmax(i) for i in pred])
+# acc = accuracy_score(one_hot_pred,y_train_test)
+# print(round(acc,4))
 
 
 
 pred = model.predict(x_test)
-one_hot_pred = np.array([np.argmax(i) for i in pred])
-one_hot_pred.shape
+one_hot_pred = []
+for i in pred:
+    if i > 0.55:
+        one_hot_pred.append(1)
+    else:
+        one_hot_pred.append(0)
 
 # print(model.evaluate(x_test,test_label))
 # acc = accuracy_score(one_hot_pred,y_train_test)
 # print(round(acc,4))
 
 type(one_hot_pred)
-one_hot_pred = np.append(one_hot_pred,1)
 df = submission_DF(one_hot_pred, len_train=len(titanic_train), len_test=len(titanic_test))
 
 path = '../pycharmProjects/pythonProject/dacon/titanic/submission.csv'
