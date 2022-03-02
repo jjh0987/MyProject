@@ -16,7 +16,7 @@ def vetorize_seq(seqs,dim=10000):
     results = np.zeros((len(seqs),dim+1))
     for i,seq in enumerate(seqs):
         results[i,seq] = 1
-        print()
+        # print()
     return results
 
 def submission_DF(pred,len_train,len_test):
@@ -83,10 +83,10 @@ def setting_data(list,dim):
                 i[j] = 0
     return vetorize_seq(list,dim)
 
-train_data = setting_data(title_set,15000)
+train_data = setting_data(title_set,8000)
 train_label = train_set['topic_idx'].values
 
-test_data = setting_data(tokeniziation(test_set),15000)
+test_data = setting_data(tokeniziation(test_set),8000)
 test_data
 # 얼마나 매칭 안되는게 많은지 체크 해봐야할 사항.
 
@@ -95,7 +95,7 @@ test_data
 
 # divide data
 from sklearn.model_selection import StratifiedKFold
-skf = StratifiedKFold(n_splits=4)
+skf = StratifiedKFold(n_splits=5)
 for train_index,test_index in skf.split(train_data,train_label):
     x_train,y_train = train_data[train_index],train_label[train_index]
     x_test,y_test = train_data[test_index],train_label[test_index]
@@ -109,7 +109,7 @@ from tensorflow.keras import optimizers
 from tensorflow.keras import losses
 
 model = models.Sequential()
-model.add(layers.Dense(1500,activation='relu'))
+model.add(layers.Dense(500,activation='relu'))
 model.add(layers.Dense(100,activation='relu'))
 
 model.add(layers.Dense(label_con,activation='softmax'))
