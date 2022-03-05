@@ -15,6 +15,23 @@ for _ in range(n):
             cnt += 1
     print(f'{format(round(cnt/ls[0],5)*100,".3f")}%')
 
+
+a = 1,2,3,4
+a,b,c,d = a
+a
+b
+c
+d
+
+n = int(input())
+for _ in range(n):
+    m,*scores = map(int,input().split())
+    cnt = 0
+    for i in scores:
+        if i > sum(scores)/m:
+            cnt += 1
+    print(f'{(cnt/m)*100:.3f}%')
+
 # 2947
 import copy
 ls = list(map(int,input().split()))
