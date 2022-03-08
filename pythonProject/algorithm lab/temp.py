@@ -47,3 +47,25 @@ for i in minus_store:
 
 ans = ans1 + ans2 + sum(box)*len(center_store)
 print(ans)
+
+
+# 2606
+n = int(input())
+k = int(input())
+
+computers = [list(map(int,input().split())) for _ in range(k)]
+
+conn = set()
+conn.add(1)
+
+while True:
+    temp = len(conn)
+    for computer in computers:
+        if computer[0] in conn:
+            conn.add(computer[1])
+        elif computer[1] in conn:
+            conn.add(computer[0])
+    if temp == len(conn):
+        break
+
+print(len(conn)-1)

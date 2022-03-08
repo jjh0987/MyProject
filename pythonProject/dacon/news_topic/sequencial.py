@@ -43,6 +43,7 @@ train_set.drop('index',axis=1,inplace=True)
 
 
 # prior tokenizing
+'''
 token_list = []
 title_set = []
 for i in train_set['title']:
@@ -51,7 +52,7 @@ for i in train_set['title']:
         token_list.append(j)
         temp.append(j)
     title_set.append(temp)
-
+'''
 def tokeniziation(df):
     title_set = []
     for i in df['title']:
