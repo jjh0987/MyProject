@@ -14,10 +14,7 @@ for i in range(9):
 
 sum_height_list = sum(height_list)
 
-sum_pair = []
-for i in pair_list:
-    sum_pair.append(sum(i))
-
+sum_pair = [sum(i) for i in pair_list]
 idx = 0
 for i in sum_pair:
     if sum_height_list - i == 100:
@@ -25,12 +22,10 @@ for i in sum_pair:
     else:
         idx += 1
 
-height = set(height_list)
 target = set(pair_list[idx])
-ans = list(height-target)
-ans.sort()
-for i in ans:
-    print(i)
+for i in height_list:
+    if i not in target:
+        print(i)
 
 # 2116
 import sys

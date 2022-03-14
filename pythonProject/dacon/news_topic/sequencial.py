@@ -43,7 +43,6 @@ train_set.drop('index',axis=1,inplace=True)
 
 
 # prior tokenizing
-'''
 token_list = []
 title_set = []
 for i in train_set['title']:
@@ -52,7 +51,7 @@ for i in train_set['title']:
         token_list.append(j)
         temp.append(j)
     title_set.append(temp)
-'''
+
 def tokeniziation(df):
     title_set = []
     for i in df['title']:
@@ -66,6 +65,7 @@ def tokeniziation(df):
 # train_set
 
 temp = pd.DataFrame(data=token_list)
+
 token_set = pd.DataFrame(data=temp.value_counts())
 word_idx = {token_set.index[i][0]:i+1 for i in range(len(token_set))}
 word_idx
