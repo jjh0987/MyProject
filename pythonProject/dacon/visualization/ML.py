@@ -193,87 +193,33 @@ class internal_data():
         train_data = self.setting_data(train_data, dim, word_idx)
         train_label = np.array(train_label)
         return train_data, train_label
-
-    def similar_candidate(self):
-        target_string = input('원하는 키워드를 적어 주세요. 카워드에 따라 공약집이 추천 됩니다.')
-        # print(np.argmax(model.predict(cl.setting_data([okt.nouns(target_string)],dim))))
-        target = model.predict(cl.setting_data([okt.nouns(target_string)], dim, word_idx))
-        target = target.squeeze()
-
-        print('키워드 유사 공약 후보')
-        for i in range(len(target)):
-            if target[i] > 0.15:
-                print(f'기호{i + 1}번, {round(target[i] * 100, 2)}%')
 # 전체 후보가 언급한 단어에 대한 시각화 : extend
 # 각 후보가 언급한 단어에 대한 시각화 : append
 # 2회분량 공약집 내용 변화 시각화 -> 사진 페이지 처리 혹은 다른 pdf 혹은 파일
 # 불용어, 복합 명사 처리
-path_stopword_all = '/Users/junho/Desktop/pycharmProjects/pythonProject/dacon/visualization/data/stopwords_all.txt'
-# using glob
-path_stopword_can = '/Users/junho/Desktop/pycharmProjects/pythonProject/dacon/visualization/data/stopwords/stopwords_01.txt'
-path_title_csv = '/Users/junho/Desktop/pycharmProjects/pythonProject/dacon/visualization/data/promise10.csv'
+
 
 cl = internal_data()
-
-word_idx = cl.word_idx_dict_all(14)
-
-clean_text = cl.dict_data(14,'all') # 모든 후보,중복 단어
-counts = Counter(clean_text)
-cl.showWordCloud(counts,'All candidates')
-
-tags_20 = counts.most_common(20)
-cl.showGraph(dict(tags_20),'All candidates')
-
-
-# 기호 1번 샘플
-clean_text_each = cl.dict_data(14,'each')
-counts_each = [Counter(i) for i in clean_text_each]
-len(counts_each)
-counts_each[0]['분석']
-counts_each[0]
-
-cl.showWordCloud(counts_each[0],'기호1')
-cl.showGraph(dict(counts_each[0].most_common(20)),'기호1')
-
-
-# 유사도 측정
-# input : 번호,stopword path,
-# drop_len=5 제거길이 (문장 정규표혀,공백 strip 후 빈문장 혹은 '목표','이행방법' 등의 문장 제거를 위한 단위길이)
-sents_clear = cl.make_clear_sentences(1,path_stopword_can,drop_len=5)
-cl.show_simirality(sents_clear,'일자리','1')
-
-
-temp_sents_all = [cl.make_clear_sentences(num,path_stopword_all) for num in range(1,15)]
-clear_sents_all = []
-for i in temp_sents_all:
-    clear_sents_all += i
-
-model = Word2Vec(clear_sents_all)
-model.wv.most_similar('부동산',topn=15)
-
-df = pd.read_csv(path_title_csv)
-df = df.set_index('Unnamed: 0')
-df
-
-# word_idx = cl.word_idx_dict_all(14)
-# dim = len(word_idx)
-# target = cl.dict_data(14,method='each')
-# target
-
-
-
-# ml
 label_con = 6
+word_idx = cl.word_idx_dict_all(14)
 dim = len(word_idx)
-train_data,train_label = cl.preprocessing_ml_data(label_con,word_idx)
-print('preprocessing complete.')
-# len(train_data) # line length : num of sentence : 1979
-# len(train_data[0]) # dict length : num of word : 3974
 
-# ml : sequential
+train_data,train_label = cl.preprocessing_ml_data(label_con,word_idx)
+len(train_data) # line length : num of sentence
+len(train_data[0]) # dict length : num of word
+'''
+# divide data
+from sklearn.model_selection import StratifiedKFold
+skf = StratifiedKFold(n_splits=5)
+for train_index,test_index in skf.split(train_data,train_label):
+    x_train,y_train = train_data[train_index],train_label[train_index]
+    x_test,y_test = train_data[test_index],train_label[test_index]
+'''
+
 model = models.Sequential()
 model.add(layers.Dense(300,activation='relu'))
 model.add(layers.Dense(50,activation='relu'))
+
 model.add(layers.Dense(label_con,activation='softmax'))
 
 opt = optimizers.Adam(learning_rate=0.01)
@@ -282,4 +228,12 @@ model.compile(optimizer=opt,loss=loss,metrics=['accuracy'])
 
 model.fit(train_data,train_label,epochs=15,batch_size=50)
 
-cl.similar_candidate()
+target_string = input('원하는 키워드를 적어 주세요. 카워드에 따라 공약집이 추천 됩니다.')
+# print(np.argmax(model.predict(cl.setting_data([okt.nouns(target_string)],dim))))
+target = model.predict(cl.setting_data([okt.nouns(target_string)],dim,word_idx))
+target = target.squeeze()
+
+print('키워드 유사 공약 후보')
+for i in range(len(target)):
+    if target[i] > 0.15:
+        print(f'기호{i+1}번, {round(target[i]*100,2)}%')

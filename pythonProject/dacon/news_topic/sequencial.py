@@ -37,10 +37,11 @@ def write_csv(path,df):
 # table is full
 # nouns set, all set
 train_set,test_set,idx_set = load_datasets()
-
+train_set
+test_set
+idx_set
 okt = Okt()
 train_set.drop('index',axis=1,inplace=True)
-
 
 # prior tokenizing
 token_list = []
@@ -83,12 +84,14 @@ def setting_data(list,dim):
             if i[j] > dim:
                 i[j] = 0
     return vetorize_seq(list,dim)
-
+title_set
 train_data = setting_data(title_set,8000)
+train_data
 train_label = train_set['topic_idx'].values
+train_label
 
 test_data = setting_data(tokeniziation(test_set),8000)
-test_data
+len(test_data[0])
 # 얼마나 매칭 안되는게 많은지 체크 해봐야할 사항.
 
 # temp = [[i,j] for i,j in zip(train_data,train_label)]
@@ -102,7 +105,7 @@ for train_index,test_index in skf.split(train_data,train_label):
     x_test,y_test = train_data[test_index],train_label[test_index]
 
 label_con = len(idx_set)
-
+label_con
 from sklearn.metrics import accuracy_score
 from tensorflow.keras import models
 from tensorflow.keras import layers

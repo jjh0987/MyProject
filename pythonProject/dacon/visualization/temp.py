@@ -7,15 +7,25 @@ okt = Okt()
 
 
 def tokenization(pdf):
+    stopword_path = '/Users/junho/Desktop/pycharmProjects/pythonProject/dacon/visualization/data/stopwords_all.txt'
     temp = []
+    f = open(stopword_path, 'r')
+    stop = f.readlines()
+    f.close()
+    stopwords = set(i.rstrip('\n') for i in stop)
     for page in pdf.pages:
         temp.extend(okt.nouns(page.extract_text()))
-    return temp
+    token = []
+    for word in temp:
+        if word not in stopwords:
+            token.append(word)
+    return token
 
 # append [[],[]..] for each candidate
 # extend [] for all
-def dict_data(num_of_candidate, method):
+def dict_data(num_of_candidate, method, stopword_path):
     candidate_text = []
+
     for num in range(1, num_of_candidate + 1):
         path = f'/Users/junho/Downloads/open/기호_{num} 공약.pdf'  # glob 이용 으로 은닉
         pdf = pdfplumber.open(path)
@@ -218,7 +228,13 @@ model = Word2Vec(sents_clear)
 model.wv.most_similar('청년')
 
 
-
-
 # 원본 + 후보 2명 stopword
 # 전체원본 + 전체 stopword
+path = '/Users/junho/Desktop/pycharmProjects/pythonProject/dacon/visualization/data/promise10.csv'
+df = pd.read_csv(path)
+# label = [경제,안보,환경,복지,교육,보건,주거]
+df = df.rename(columns=df.columns)
+df = df.set_index('Unnamed: 0')
+
+
+
