@@ -107,7 +107,7 @@ plt.scatter(p_df.iloc[kmeans.labels_ == 1,0],
 #            p_df.iloc[kmeans.labels_ == 3,1], s = 10, c = 'purple', label = 'clustering4')
 #plt.scatter(p_df.iloc[kmeans.labels_ == 4,0],
 #            p_df.iloc[kmeans.labels_ == 4,1], s = 10, c = 'orange', label = 'clustering5')
-
+kmeans.labels_
 plt.scatter(
     pc[:, 0], pc[:, 1],
     s=250, marker='*',
