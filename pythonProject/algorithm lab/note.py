@@ -23,8 +23,8 @@ def pairwise(iterable):
     return zip(a, b)
 
 group_nums = [i for i in pairwise(nums)]
-pair1 = [group_nums[i] for i in range(0,len(group_nums),2)]
-pair2 = [group_nums[i] for i in range(1,len(group_nums),2)]
+pair1 = [list(group_nums[i]) for i in range(0,len(group_nums),2)]
+pair2 = [list(group_nums[i]) for i in range(1,len(group_nums),2)]
 
 
 pair1_sub = [] # start idx 0

@@ -13,6 +13,8 @@ from tensorflow.keras import models
 from tensorflow.keras import layers
 from tensorflow.keras import optimizers
 from tensorflow.keras import losses
+from tensorflow import random
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 okt = Okt()
 class internal_data():
@@ -162,7 +164,7 @@ class internal_data():
     def vetorize_seq(self,seqs, dim=10000):
         results = np.zeros((len(seqs), dim + 1))
         for i, seq in enumerate(seqs):
-            results[i, seq] = 1
+            results[i, seq] += 1
             # print()
         return results
 
@@ -194,16 +196,73 @@ class internal_data():
         train_label = np.array(train_label)
         return train_data, train_label
 
-    def similar_candidate(self):
-        target_string = input('원하는 키워드를 적어 주세요. 카워드에 따라 공약집이 추천 됩니다.')
+    def ml(self,label_con, word_idx, train_data, train_label):
+        dim = len(word_idx)
+        random.set_seed(50)
+        # train_data,train_label = cl.preprocessing_ml_data(label_con,word_idx)
+        # len(train_data) # line length : num of sentence
+        # len(train_data[0]) # dict length : num of word
+        model = models.Sequential()
+        model.add(layers.Dense(300, activation='relu'))
+        model.add(layers.Dense(50, activation='relu'))
+
+        model.add(layers.Dense(label_con, activation='softmax'))
+
+        opt = optimizers.Adam(learning_rate=0.01)
+        loss = losses.sparse_categorical_crossentropy
+        model.compile(optimizer=opt, loss=loss, metrics=['accuracy'])
+
+        model.fit(train_data, train_label, epochs=15, batch_size=50)
+
+        return model,dim
+
+    def show_similar_candidate(self,model,dim):
+        target_string = input('원하는 키워드를 적어 주세요. 카워드를 기반한 공약집이 추천 됩니다.')
         # print(np.argmax(model.predict(cl.setting_data([okt.nouns(target_string)],dim))))
         target = model.predict(cl.setting_data([okt.nouns(target_string)], dim, word_idx))
         target = target.squeeze()
-
         print('키워드 유사 공약 후보')
         for i in range(len(target)):
-            if target[i] > 0.15:
+            if target[i] > 0.10:
                 print(f'기호{i + 1}번, {round(target[i] * 100, 2)}%')
+
+    def tf_idf_score(self):
+        sentences = []
+        for i in range(1, 15):
+            target = self.get_candidate_page_data(i)
+            temp = []
+            for i in target:
+                temp.extend(i.split('\n'))
+            hangul = re.compile('[^ ㄱ-ㅣ가-힣]+')
+            temp = [hangul.sub('', i).strip() for i in temp]
+            temp_sen = ''
+
+            for i in temp:
+                if len(i) > 5:
+                    temp_sen += i
+            sentences.append(okt.nouns(temp_sen))
+
+        tf_sentences = []
+        for i in sentences:
+            temp = ''
+            for j in i:
+                temp += j + ' '
+            tf_sentences.append(temp)
+
+        f = open(path_stopword_all, 'r')
+        stop = f.readlines()
+        f.close()
+        stopwords = set(i.rstrip('\n') for i in stop)
+        t_vec = TfidfVectorizer(max_features=3000, stop_words=stopwords)
+        tdm = t_vec.fit_transform(tf_sentences)
+        t_vec.get_feature_names_out()
+        word_count = pd.DataFrame({
+            '단어': t_vec.get_feature_names_out(),
+            'tf-idf': tdm.sum(axis=0).flat
+        })
+        word_count = word_count.set_index('단어')
+        word_count = word_count.sort_values('tf-idf', ascending=False)
+        return t_vec,tf_sentences,word_count
 # 전체 후보가 언급한 단어에 대한 시각화 : extend
 # 각 후보가 언급한 단어에 대한 시각화 : append
 # 2회분량 공약집 내용 변화 시각화 -> 사진 페이지 처리 혹은 다른 pdf 혹은 파일
@@ -260,26 +319,48 @@ df
 # target = cl.dict_data(14,method='each')
 # target
 
+'''
+# divide data
+from sklearn.model_selection import StratifiedKFold
+skf = StratifiedKFold(n_splits=5)
+for train_index,test_index in skf.split(train_data,train_label):
+    x_train,y_train = train_data[train_index],train_label[train_index]
+    x_test,y_test = train_data[test_index],train_label[test_index]
+'''
 
+# ML
+tf_idf,tf_sentences,tf_idf_score = cl.tf_idf_score()
+tf_idf.get_feature_names()
+tdm = tf_idf.fit_transform(tf_sentences)
 
-# ml
+cl = internal_data()
 label_con = 6
-dim = len(word_idx)
-train_data,train_label = cl.preprocessing_ml_data(label_con,word_idx)
-print('preprocessing complete.')
-# len(train_data) # line length : num of sentence : 1979
-# len(train_data[0]) # dict length : num of word : 3974
+word_idx = cl.word_idx_dict_all(14)
 
-# ml : sequential
-model = models.Sequential()
-model.add(layers.Dense(300,activation='relu'))
-model.add(layers.Dense(50,activation='relu'))
-model.add(layers.Dense(label_con,activation='softmax'))
+# train data : 14pdf 각 문장
+tf_idf_score[:50] # 스코어가 높을수록 특정 문서에서 많이 쓰이는 경향이 있음. # 갯수 슬라이싱
+train_data, train_label = cl.preprocessing_ml_data(label_con, word_idx)
 
-opt = optimizers.Adam(learning_rate=0.01)
-loss = losses.sparse_categorical_crossentropy
-model.compile(optimizer=opt,loss=loss,metrics=['accuracy'])
+model,dim = cl.ml(label_con,word_idx,train_data,train_label)
+cl.show_similar_candidate(model,dim)
+# ml preprocessing 방식
+# 각페이지 붙인 공약집 re 처리후 길이 5이하 제거 -> okt.nouns 이용 후 토크나이징
 
-model.fit(train_data,train_label,epochs=15,batch_size=50)
 
-cl.similar_candidate()
+# corr
+tf_idf,tf_sentences,tf_idf_score = cl.tf_idf_score()
+from sklearn.feature_extraction.text import CountVectorizer
+cv = CountVectorizer(max_features=500)
+tdm = cv.fit_transform(tf_sentences)
+
+df = pd.DataFrame(data=tdm.toarray(),columns=cv.get_feature_names_out())
+df.reset_index(inplace=True)
+df['index'] += 1
+df.set_index('index',inplace=True)
+df = df.transpose()
+
+import seaborn as sns
+sns.clustermap(df.corr(),
+               annot = True,
+               cmap = 'RdYlBu_r',
+               vmin = -1, vmax = 1)

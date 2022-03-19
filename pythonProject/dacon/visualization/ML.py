@@ -193,6 +193,40 @@ class internal_data():
         train_data = self.setting_data(train_data, dim, word_idx)
         train_label = np.array(train_label)
         return train_data, train_label
+
+    def ml(self,label_con, word_idx, train_data, train_label):
+        dim = len(word_idx)
+
+        # train_data,train_label = cl.preprocessing_ml_data(label_con,word_idx)
+        # len(train_data) # line length : num of sentence
+        # len(train_data[0]) # dict length : num of word
+        model = models.Sequential()
+        model.add(layers.Dense(300, activation='relu'))
+        model.add(layers.Dense(50, activation='relu'))
+
+        model.add(layers.Dense(label_con, activation='softmax'))
+
+        opt = optimizers.Adam(learning_rate=0.01)
+        loss = losses.sparse_categorical_crossentropy
+        model.compile(optimizer=opt, loss=loss, metrics=['accuracy'])
+
+        model.fit(train_data, train_label, epochs=15, batch_size=50)
+
+        target_string = input('원하는 키워드를 적어 주세요. 카워드에 따라 공약집이 추천 됩니다.')
+        # print(np.argmax(model.predict(cl.setting_data([okt.nouns(target_string)],dim))))
+        target = model.predict(cl.setting_data([okt.nouns(target_string)], dim, word_idx))
+        target = target.squeeze()
+        return target
+
+    def show_similar_candidate(self,target):
+        for _ in range(5):
+            print()
+        print('키워드 유사 공약 후보')
+        for i in range(len(target)):
+            if target[i] > 0.15:
+                print(f'기호{i + 1}번, {round(target[i] * 100, 2)}%')
+
+
 # 전체 후보가 언급한 단어에 대한 시각화 : extend
 # 각 후보가 언급한 단어에 대한 시각화 : append
 # 2회분량 공약집 내용 변화 시각화 -> 사진 페이지 처리 혹은 다른 pdf 혹은 파일
@@ -202,11 +236,8 @@ class internal_data():
 cl = internal_data()
 label_con = 6
 word_idx = cl.word_idx_dict_all(14)
-dim = len(word_idx)
+train_data, train_label = cl.preprocessing_ml_data(label_con, word_idx)
 
-train_data,train_label = cl.preprocessing_ml_data(label_con,word_idx)
-len(train_data) # line length : num of sentence
-len(train_data[0]) # dict length : num of word
 '''
 # divide data
 from sklearn.model_selection import StratifiedKFold
@@ -215,25 +246,5 @@ for train_index,test_index in skf.split(train_data,train_label):
     x_train,y_train = train_data[train_index],train_label[train_index]
     x_test,y_test = train_data[test_index],train_label[test_index]
 '''
-
-model = models.Sequential()
-model.add(layers.Dense(300,activation='relu'))
-model.add(layers.Dense(50,activation='relu'))
-
-model.add(layers.Dense(label_con,activation='softmax'))
-
-opt = optimizers.Adam(learning_rate=0.01)
-loss = losses.sparse_categorical_crossentropy
-model.compile(optimizer=opt,loss=loss,metrics=['accuracy'])
-
-model.fit(train_data,train_label,epochs=15,batch_size=50)
-
-target_string = input('원하는 키워드를 적어 주세요. 카워드에 따라 공약집이 추천 됩니다.')
-# print(np.argmax(model.predict(cl.setting_data([okt.nouns(target_string)],dim))))
-target = model.predict(cl.setting_data([okt.nouns(target_string)],dim,word_idx))
-target = target.squeeze()
-
-print('키워드 유사 공약 후보')
-for i in range(len(target)):
-    if target[i] > 0.15:
-        print(f'기호{i+1}번, {round(target[i]*100,2)}%')
+target = cl.ml(label_con,word_idx,train_data,train_label)
+cl.show_similar_candidate(target)

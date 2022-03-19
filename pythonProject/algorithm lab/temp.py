@@ -48,52 +48,52 @@ for i in minus_store:
 ans = ans1 + ans2 + sum(box)*len(center_store)
 print(ans)
 
+# 10157
+width,height = map(int,input().split())
+loc = int(input())
+rec = []
 
-# 2491
-n = int(input())
-num = [int(i) for i in input().split()]
+for i in range(50):
+    temp = 2 * ((width - 1 - 2 * i) + (height - 1 - 2 * i))
+    if temp > 0:
+        rec.append(temp)
+if width * height - sum(rec) > 0:
+    rec.append(width * height - sum(rec))
 
-ans1 = [1]*n
-ans2 = [1]*n
-for i in range(1,n):
-    if num[i] >= num[i-1]:
-        ans1[i] = max(ans1[i],ans1[i-1]+1)
-    if num[i] <= num[i-1]:
-        ans2[i] = max(ans2[i],ans2[i-1]+1)
+ans = []
+x = 1
+if width*height < loc:
+    x = 0
+else:
+    starting_pt = [1,1]
+    for i in range(len(rec)):
+        loc -= rec[i]
+        if loc <= 0:
+            loc += rec[i]
+            starting_pt = [i+1,i+1]
+            height = height-2*i
+            width = width-2*i
+            rec_target = rec[i]
+            break
 
-print(max(max(ans1),max(ans2)))
+    temp = [starting_pt]
+    for i in range(1,height):
+        temp.append([starting_pt[0],starting_pt[1]+i])
+    starting_pt = temp[-1]
 
-# 2559
-n,diff = map(int,input().split())
-ls = [i for i in list(map(int,input().split()))]
-temp = [0]*(n+1-diff)
-temp[0] = sum(ls[0:diff])
-for i in range(1,n):
-    try:
-        temp[i] = ls[i+diff-1] + temp[i-1] - ls[i-1]
-    except:
-        break
-print(max(temp))
+    for i in range(1,width):
+        temp.append([starting_pt[0]+i,starting_pt[1]])
+    starting_pt = temp[-1]
 
-# 2628
-x,y = map(int,input().split())
-n = int(input())
-chop = [list(map(int,input().split())) for _ in range(n)]
+    for i in range(1,height):
+        temp.append([starting_pt[0],starting_pt[1]-i])
+    starting_pt = temp[-1]
 
-x = [0,x]
-y = [0,y]
-for i in chop:
-    if i[0] == 1:
-        x.append(i[1])
-    else:
-        y.append(i[1])
-x.sort()
-y.sort()
-len_x = []
-len_y = []
-for i in range(1,len(x)):
-    len_x.append(x[i]-x[i-1])
-for i in range(1,len(y)):
-    len_y.append(y[i]-y[i-1])
-
-print(max(len_x)*max(len_y))
+    for i in range(1,width):
+        temp.append([starting_pt[0]-i,starting_pt[1]])
+    temp.pop(-1)
+    ans.extend(temp)
+if x == 0:
+    print(0)
+else:
+    print(*ans[loc-1])
