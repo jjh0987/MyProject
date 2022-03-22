@@ -60,17 +60,14 @@ x = vectorize.fit_transform(clean_text)
 #데이터 프레임 생성 (문장 단어 매트릭스 만들기)
 new_df = pd.DataFrame(x.toarray(), columns=vectorize.get_feature_names_out())
 # K- means 군집 분석
-
-kmeans = KMeans(n_clusters=4, n_init = 10, max_iter = 300, random_state = 50).fit(new_df)
+pca = PCA(n_components=2) # 2차원으로 축소
+pc = pca.fit_transform(new_df)
+p_df = pd.DataFrame(data=pc, columns=['x', 'y'])
+kmeans = KMeans(n_clusters=4, n_init = 10, max_iter = 300, random_state = 50).fit(p_df)
 print('K-평균 군집 분석 결과')
 candidate_num = ['1번','2번','3번','4번','5번','6번','7번','8번','9번','10번','11번','12번','13번','14번']
 for i, j in zip(candidate_num,kmeans.labels_):
     print(i, j)
-
-
-pca = PCA(n_components=2) # 2차원으로 축소
-pc = pca.fit_transform(new_df)
-p_df = pd.DataFrame(data=pc, columns=['x', 'y'])
 
 plt.scatter(p_df.iloc[kmeans.labels_ == 0,0],
             p_df.iloc[kmeans.labels_ == 0,1], s = 10, c = 'red', label = 'clustering1')

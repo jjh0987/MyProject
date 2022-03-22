@@ -128,6 +128,6 @@ plt.figure(figsize=(10, 5))
 plt.title('Dendrogram')
 plt.axhline(y=4.75, ls='--', c='r')
 dend = shc.dendrogram(shc.linkage(data, method='average'),
-                      color_threshold=254,
+                      color_threshold=154,
                       )
 

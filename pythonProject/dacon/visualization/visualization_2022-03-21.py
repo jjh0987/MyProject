@@ -15,9 +15,8 @@ from tensorflow.keras import optimizers
 from tensorflow.keras import losses
 from tensorflow import random
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.feature_extraction.text import CountVectorizer
-okt = Okt()
 
+okt = Okt()
 class internal_data():
     def __init__(self):
         pass
@@ -264,26 +263,9 @@ class internal_data():
             '단어': t_vec.get_feature_names_out(),
             'tf-idf': tdm.sum(axis=0).flat
         })
-        #word_count = word_count.set_index('단어')
-        #word_count = word_count.sort_values('tf-idf', ascending=False)
+        word_count = word_count.set_index('단어')
+        word_count = word_count.sort_values('tf-idf', ascending=False)
         return t_vec,tf_sentences,word_count
-
-    def cluster_map(self,max_features=500):
-        tf_idf, tf_sentences, tf_idf_score = self.tf_idf_score()
-        cv = CountVectorizer(max_features=max_features)
-        tdm = cv.fit_transform(tf_sentences)
-        df = pd.DataFrame(data=tdm.toarray(), columns=cv.get_feature_names_out())
-        df.reset_index(inplace=True)
-        df['index'] += 1
-        df.set_index('index', inplace=True)
-        df = df.transpose()
-
-        import seaborn as sns
-        sns.clustermap(df.corr(),
-                       annot=True,
-                       cmap='RdYlBu_r',
-                       vmin=-1, vmax=1)
-
 # 전체 후보가 언급한 단어에 대한 시각화 : extend
 # 각 후보가 언급한 단어에 대한 시각화 : append
 # 2회분량 공약집 내용 변화 시각화 -> 사진 페이지 처리 혹은 다른 pdf 혹은 파일
@@ -303,6 +285,7 @@ cl.showWordCloud(counts,'All candidates')
 
 tags_20 = counts.most_common(20)
 cl.showGraph(dict(tags_20),'All candidates')
+
 
 # 기호 1번 샘플
 clean_text_each = cl.dict_data(14,'each')
@@ -360,8 +343,6 @@ word_idx = cl.word_idx_dict_all(14)
 
 # train data : 14pdf 각 문장
 tf_idf_score[:50] # 스코어가 높을수록 특정 문서에서 많이 쓰이는 경향이 있음. # 갯수 슬라이싱
-
-'''
 train_data, train_label = cl.preprocessing_ml_data(label_con, word_idx,dim=dim)
 
 model = cl.ml(label_con,dim,train_data,train_label)
@@ -369,15 +350,26 @@ target_string = input('원하는 키워드를 적어 주세요. 카워드를 기
 idx,acc = cl.show_similar_candidate(target_string,model,dim)
 # ml preprocessing 방식
 # 각페이지 붙인 공약집 re 처리후 길이 5이하 제거 -> okt.nouns 이용 후 토크나이징
-'''
+
 
 # corr
-tf_sentences
-cl.cluster_map() # all contents, counter_vector, max features : 500
+tf_idf,tf_sentences,tf_idf_score = cl.tf_idf_score()
+from sklearn.feature_extraction.text import CountVectorizer
+cv = CountVectorizer(max_features=500)
+tdm = cv.fit_transform(tf_sentences)
+df = pd.DataFrame(data=tdm.toarray(),columns=cv.get_feature_names_out())
+df.reset_index(inplace=True)
+df['index'] += 1
+df.set_index('index',inplace=True)
+df = df.transpose()
+
+import seaborn as sns
+sns.clustermap(df.corr(),
+               annot = True,
+               cmap = 'RdYlBu_r',
+               vmin = -1, vmax = 1)
 
 
-
-# ML
 label_con = 6
 dim = 2500 # vector dimension
 word_idx = cl.word_idx_dict_all(14)
@@ -385,25 +377,20 @@ word_idx = cl.word_idx_dict_all(14)
 train_data, train_label = cl.preprocessing_ml_data(label_con, word_idx,dim=dim)
 model = cl.ml(label_con,train_data,train_label)
 
-def temp():
-    target_string = input('원하는 키워드를 적어 주세요. 카워드를 기반한 공약집이 추천 됩니다.')
-    key = okt.nouns(target_string)
-    idx,acc = cl.show_similar_candidate(target_string,model,dim)
-    candidate_dict = {idx[i]:acc[i] for i in range(len(idx))}
-    df = pd.read_csv('/Users/junho/Downloads/promise_all.csv') # 14 by 10
-    # df = pd.read_csv('/Users/junho/Downloads/promise10.csv') # 14 by 10
+target_string = input('원하는 키워드를 적어 주세요. 카워드를 기반한 공약집이 추천 됩니다.')
+key = okt.nouns(target_string)
+idx,acc = cl.show_similar_candidate(target_string,model,dim)
+candidate_dict = {idx[i]:acc[i] for i in range(len(idx))}
+df = pd.read_csv('/Users/junho/Downloads/promise_all.csv') # 14 by 10
 
-    check = set(tf_idf_score.sort_values('tf-idf', ascending=False)[:300].iloc[:,0])
-    for i in idx:
-        x = 0
-        cnt = 0
-        print()
-        for j in range(1,11):
-            if x == 0:
-                print(f'기호{i}번, {candidate_dict[i]}%')
-                x += 1
-            for k in key:
-                if k in str(df.iloc[i-1,j]) and k in check:
-                    print(f'공약{j}번: {df.iloc[i - 1, j][:15]}..')
-                    break
-
+for i in idx:
+    x = 0
+    print()
+    for j in range(1,11):
+        for k in key:
+            if k in str(df.iloc[i-1,j]):
+                if x == 0:
+                    print(f'기호{i}번, {candidate_dict[i]}%')
+                    x += 1
+                print(f'공약{j}번: {df.iloc[i - 1, j]}')
+                break
