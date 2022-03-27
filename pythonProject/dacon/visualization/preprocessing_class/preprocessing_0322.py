@@ -25,66 +25,64 @@ class preprocessing:
     def __init__(self,stopword_path,pdf_path):
         self.stopword_path = stopword_path
         self.pdf_path = pdf_path
-        self.pdf = [pdfplumber.open(i) for i in pdf_path]
+        self.pdf_files = [pdfplumber.open(i) for i in pdf_path]
 
         f = open(self.stopword_path, 'r')
         stop = f.readlines()
         self.stopwords = set(i.rstrip('\n') for i in stop)
         f.close()
+        self.clear_sentences,self.top10 = self.make_clear_sentences() # 원본: 역추적용
 
     def tokenization(self):
         # okt.nouns(pdfplumber.open(pdf_path[0]).pages[0].extract_text())[0] : 호출 순서
         tokenized_word = []
-        for pdf in self.pdf:
+        for pdf in self.pdf_files:
             temp = []
             for page in pdf.pages:
                 temp.extend(okt.nouns(page.extract_text()))
-            tokenized_word.append(temp)
             token = []
             for word in temp:
                 if word not in self.stopwords:
                     token.append(word)
+            tokenized_word.append(token)
         return tokenized_word
 
-stopword_path = '../pycharmProjects/pythonProject/dacon/visualization/data/stopwords_all.txt'
-pdf_path = sorted(glob.glob('/Users/junho/Downloads/open/*'))
+    def make_clear_sentences(self, drop_len=5):
+        clear_sentences = []
+        top10 = []
+        for pdf in self.pdf_files:
+            temp_sen = []
+            temp_top = []
+            for page in pdf.pages:
+                hangul = re.compile('[^ ㄱ-ㅣ가-힣]+')
+                clear_sen = [hangul.sub('', str(i)).rstrip() for i in page.extract_text().split('\n')]
 
-okt.nouns(pdfplumber.open(pdf_path[0]).pages[0].ti)
+                for sen in clear_sen:
+                    if len(sen) > drop_len:
+                        temp_sen.append(sen.replace('공약순위',''))
+                    if '공약순위' in sen:
+                        temp_top.append(sen.replace('공약순위','').lstrip())
+            clear_sentences.append(temp_sen)
+            top10.append(temp_top)
+        return clear_sentences,top10
+
+    # def stopword_re(self):
+
+stopword_path = '../pycharmProjects/pythonProject/dacon/visualization/data/stopwords_all.txt'
+pdf_path = sorted(glob.glob('/Users/junho/Downloads/pdf/*'))
 
 pre = preprocessing(stopword_path,pdf_path)
 token = pre.tokenization()
+len(token[0])
 
-pre.tokenization()
 pre.stopwords
 pre.pdf_path
-pre.pdf
+pre.top10
+pre.clear_sentences
 
+top10 = pre.top10
+okt.nouns(top10[0][0])
 
-def make_clear_sentences(self, candidate_number, stopword_path, drop_len=5):
-    temp = self.get_candidate_page_data(candidate_number)  # input : number of candidate
-    clear = [i.split('\n') for i in temp]
-    hangul = re.compile('[^ ㄱ-ㅣ가-힣]+')
-    clear_cen = []
-    for candidate in clear:
-        for cen in candidate:
-            clear_cen.append(hangul.sub('', str(cen)))
-    temp = [i.strip() for i in clear_cen]
-    cen = []
-    for i in temp:
-        if len(i) > drop_len:
-            cen.append(i)
-    f = open(stopword_path, 'r')
-    stop = f.readlines()
-    f.close()
-    stopwords = set(i.rstrip('\n') for i in stop)
-    sents = [list(okt.nouns(i)) for i in cen]  # 원본
-
-    sents_clear = []
-    for sent in sents:
-        temp = []
-        for word in sent:
-            if word not in stopwords:
-                temp.append(word)
-        sents_clear.append(temp)
-    return sents_clear
+clear = [pre.pdf[0].pages[0].extract_text().split('\n')]
+clear
 

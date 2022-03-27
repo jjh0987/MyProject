@@ -23,7 +23,7 @@ class internal_data():
         pass
 
     def get_candidate_page_data(self,num):
-        path = f'/Users/junho/Downloads/open/기호_{num} 공약.pdf'
+        path = f'/Users/junho/Downloads/pdf/기호_{num} 공약.pdf'
         pdf = pdfplumber.open(path)
         temp = [page.extract_text() for page in pdf.pages]
         return temp
@@ -268,7 +268,7 @@ class internal_data():
         #word_count = word_count.sort_values('tf-idf', ascending=False)
         return t_vec,tf_sentences,word_count
 
-    def cluster_map(self,max_features=500):
+    def cluster_map(self,max_features=1000):
         tf_idf, tf_sentences, tf_idf_score = self.tf_idf_score()
         cv = CountVectorizer(max_features=max_features)
         tdm = cv.fit_transform(tf_sentences)
@@ -294,11 +294,14 @@ path_stopword_can = '/Users/junho/Desktop/pycharmProjects/pythonProject/dacon/vi
 path_title_csv = '/Users/junho/Desktop/pycharmProjects/pythonProject/dacon/visualization/data/promise10.csv'
 
 cl = internal_data()
+cl.make_clear_sentences(14,path_stopword_all)
+
 
 word_idx = cl.word_idx_dict_all(14)
 
 clean_text = cl.dict_data(14,'all') # 모든 후보,중복 단어
 counts = Counter(clean_text)
+
 cl.showWordCloud(counts,'All candidates')
 
 tags_20 = counts.most_common(20)
@@ -319,6 +322,7 @@ cl.showGraph(dict(counts_each[0].most_common(20)),'기호1')
 # input : 번호,stopword path,
 # drop_len=5 제거길이 (문장 정규표혀,공백 strip 후 빈문장 혹은 '목표','이행방법' 등의 문장 제거를 위한 단위길이)
 sents_clear = cl.make_clear_sentences(1,path_stopword_can,drop_len=5)
+sents_clear
 cl.show_simirality(sents_clear,'일자리','1')
 
 
@@ -357,7 +361,7 @@ cl = internal_data()
 label_con = 6
 dim = 2500
 word_idx = cl.word_idx_dict_all(14)
-
+word_idx
 # train data : 14pdf 각 문장
 tf_idf_score[:50] # 스코어가 높을수록 특정 문서에서 많이 쓰이는 경향이 있음. # 갯수 슬라이싱
 
@@ -384,6 +388,7 @@ word_idx = cl.word_idx_dict_all(14)
 
 train_data, train_label = cl.preprocessing_ml_data(label_con, word_idx,dim=dim)
 model = cl.ml(label_con,train_data,train_label)
+len(train_data[0])
 
 def temp():
     target_string = input('원하는 키워드를 적어 주세요. 카워드를 기반한 공약집이 추천 됩니다.')
