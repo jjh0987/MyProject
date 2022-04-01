@@ -348,3 +348,22 @@ len(w2v.wv.index_to_key)
 from gensim.models.doc2vec import Doc2Vec
 d2v = Doc2Vec(mlc.clear_sentences)
 mlc.clear_sentences
+
+
+
+pre.lines_token
+len(pre.tokens)
+temp = []
+for i in range(4):
+    key = {'경제': 0, '복지': 0, '정치': 0, '보건': 0, '환경': 0, '문화': 0,
+           '관광': 0, '노동': 0, '교육': 0, '산업': 0, '안보': 0, '국방': 0,
+           '북한': 0}
+    for j in pre.tokens[i]:
+        if j in key:
+            key[j] += 1
+    temp.append(key)
+df = pd.DataFrame(temp)
+df.index = ['기호1','기호2','기호3','기호4']
+df = df.transpose()
+
+df.plot(kind='bar',stacked=True)

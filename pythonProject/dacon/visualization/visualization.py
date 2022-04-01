@@ -247,11 +247,14 @@ class internal_data():
             sentences.append(okt.nouns(temp_sen))
 
         tf_sentences = []
-        for i in sentences:
-            temp = ''
-            for j in i:
-                temp += j + ' '
+        for token_set in sentences:
+            temp = ' '.join(token_set)
             tf_sentences.append(temp)
+        #for i in sentences:
+        #    temp = ''
+        #    for j in i:
+        #        temp += j + ' '
+        #    tf_sentences.append(temp)
 
         f = open(path_stopword_all, 'r')
         stop = f.readlines()
@@ -269,20 +272,21 @@ class internal_data():
         return t_vec,tf_sentences,word_count
 
     def cluster_map(self,max_features=1000):
-        tf_idf, tf_sentences, tf_idf_score = self.tf_idf_score()
+        import seaborn as sns
+
+        tf_idf, tf_sentences, tf_idf_score = cl.tf_idf_score()
         cv = CountVectorizer(max_features=max_features)
         tdm = cv.fit_transform(tf_sentences)
-        df = pd.DataFrame(data=tdm.toarray(), columns=cv.get_feature_names_out())
-        df.reset_index(inplace=True)
-        df['index'] += 1
-        df.set_index('index', inplace=True)
+        df = pd.DataFrame(data=tdm.toarray(), columns=cv.get_feature_names_out(), index=list(range(1, 15)))
         df = df.transpose()
 
-        import seaborn as sns
         sns.clustermap(df.corr(),
                        annot=True,
                        cmap='RdYlBu_r',
                        vmin=-1, vmax=1)
+
+
+
 
 # 전체 후보가 언급한 단어에 대한 시각화 : extend
 # 각 후보가 언급한 단어에 대한 시각화 : append
@@ -294,6 +298,9 @@ path_stopword_can = '/Users/junho/Desktop/pycharmProjects/pythonProject/dacon/vi
 path_title_csv = '/Users/junho/Desktop/pycharmProjects/pythonProject/dacon/visualization/data/promise10.csv'
 
 cl = internal_data()
+cl.cluster_map()
+
+
 cl.make_clear_sentences(14,path_stopword_all)
 
 
@@ -377,7 +384,7 @@ idx,acc = cl.show_similar_candidate(target_string,model,dim)
 
 # corr
 tf_sentences
-cl.cluster_map() # all contents, counter_vector, max features : 500
+cl.cluster_map(max_features=1000) # all contents, counter_vector, max features : 500
 
 
 
