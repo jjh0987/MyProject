@@ -125,7 +125,10 @@ class PreprocessData():
 
 stopword_path = '../pycharmProjects/pythonProject/dacon/visualization/data/stopwords_all.txt'
 pdf_path = sorted(glob.glob('/Users/junho/Downloads/pdf/*'))
+pre = PreprocessData(stopword_path,pdf_path)
 
+temp = pd.DataFrame(data=pre.word_idx.keys())
+temp.to_csv('/Users/junho/Desktop/server/data/word_idx.csv')
 '''
 pre = PreprocessData(stopword_path, pdf_path)
 pre.pdf_path
