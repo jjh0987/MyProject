@@ -97,3 +97,26 @@ if x == 0:
     print(0)
 else:
     print(*ans[loc-1])
+
+
+#
+import sys
+input = sys.stdin.readline
+N,M = map(int,input().split())
+shirts = sorted([int(input()) for i in range(N)])
+sailor = sorted([int(input()) for i in range(M)])
+
+from collections import deque
+
+cnt = 0
+queue = deque(sailor)
+for w in shirts:
+    idx = len(queue)
+    for _ in range(idx):
+        temp = queue.popleft()
+        if w*1/2 <= temp <= w*3/4 or w <= temp <= w*5/4:
+            cnt += 1
+            break
+        else:
+            queue.append(temp)
+print(cnt)
