@@ -36,3 +36,67 @@ for i in range(len(pair2)+1):
 
 pair1_sub
 pair2_sub
+
+
+
+
+
+
+
+M,N = map(int,input().split())
+start_x,start_y,dir = map(int,input().split())
+sample = []
+for _ in range(M):
+    sample.append(list(map(str,input().split())))
+def make_grid():
+    grid = []
+    cnt_x = 0
+    for i in sample:
+        cnt_y = 0
+        for j in i:
+            if j == '0':
+                grid.append((cnt_x,cnt_y))
+            cnt_y += 1
+        cnt_x += 1
+    return grid
+
+start = (start_x,start_y)
+x_dr = [0,1,0,-1]
+y_dr = [-1,0,1,0]
+start_dir = [x_dr[dir],y_dr[dir]]
+
+answer = []
+grid = make_grid()
+
+answer.append(grid.pop(grid.index(start)))
+x_test,y_test = start_x,start_y
+while True:
+
+
+    cnt = -1
+    for dir_ in range(4):
+        tp = (dir - dir_ - 1)%4
+        x_test = start[0] + y_dr[tp]
+        y_test = start[1] + x_dr[tp]
+        if (x_test,y_test) in grid:
+            start = (x_test,y_test)
+            answer.append(grid.pop(grid.index(start)))
+            dir = tp
+            break
+        else:
+            cnt += 1
+
+    if cnt == 3:
+        tp = (dir+2)%4
+        x_test = start[0] + y_dr[tp]
+        y_test = start[1] + x_dr[tp]
+        start = (x_test, y_test)
+        if (x_test,y_test) in grid:
+            answer.append(grid.pop(grid.index(start)))
+            dir = tp
+            break
+
+    if (x_test < 1) or (x_test > M - 2) or (y_test < 1) or (y_test > N - 2):
+        break
+
+print(len(answer))
