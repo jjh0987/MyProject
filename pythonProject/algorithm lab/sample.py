@@ -60,4 +60,59 @@ print(len(answer))
 # 10026
 n = int(input())
 sample = [' '.join(input()).split(' ') for _ in range(n)]
+sample.append([' ' for _ in range(n)])
+def horizon(row,color):
+    lst = []
+    for i in range(n):
+        if row[i] in set(color):
+            lst.append(i)
+        else:
+            lst.append(' ')
+    return lst
 
+R = []
+G = []
+B = []
+for i in range(n+1):
+    for color in ['R','G','B']:
+        if color == 'R':
+            R.append(horizon(sample[i],[color]))
+        elif color == 'G':
+            G.append(horizon(sample[i],[color]))
+        elif color == 'B':
+            B.append(horizon(sample[i],[color]))
+
+
+col_set = [R,G,B]
+cnt1 = 0
+for col in col_set:
+    for i in range(n):
+        try:
+            if col[i] == set():
+                continue
+            if col[i].intersection(col[i+1]) == set():
+                cnt1 += 1
+        except:
+            pass
+
+RnG = []
+B = []
+for i in range(n + 1):
+    for color in [['R', 'G'], 'B']:
+        if color == ['R','G']:
+            RnG.append(horizon(sample[i], color))
+        elif color == 'B':
+            B.append(horizon(sample[i], [color]))
+
+col_set = [RnG, B]
+cnt2 = 0
+for col in col_set:
+    for i in range(n):
+        try:
+            if col[i] == set():
+                continue
+            if col[i].intersection(col[i + 1]) == set():
+                cnt2 += 1
+        except:
+            pass
+print(cnt1,cnt2)
