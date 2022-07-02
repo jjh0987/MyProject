@@ -116,3 +116,15 @@ for col in col_set:
         except:
             pass
 print(cnt1,cnt2)
+
+
+
+
+
+#
+import sys
+input = sys.stdin.readline
+
+n = int(input())
+clock = [list(map(int,input().split())) for i in range(n)]
+clock.sort()
