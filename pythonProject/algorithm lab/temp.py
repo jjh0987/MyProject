@@ -120,3 +120,26 @@ for w in shirts:
         else:
             queue.append(temp)
 print(cnt)
+
+
+# 17298
+n = int(input())
+test = divmod(n,9)
+if len(str(n)) == 1:
+    print(1)
+else:
+    if test[0]%2 == 1 and test[1]%2 == 0:
+        if test[1] == 0:
+            print(test[0])
+        else:
+            print(test[0]+2)
+    elif test[0]%2 == 1 and test[1]%2 == 1:
+        print(test[0]+1)
+    elif test[0]%2 == 0 and test[1]%2 == 0:
+        if test[1] == 0:
+            print(test[0])
+        else:
+            print(test[0]+2)
+    elif test[0]%2 == 0 and test[1]%2 == 1:
+        print(test[0]+1)
+
