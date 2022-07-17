@@ -2,7 +2,6 @@
 n = int(input())
 
 dp = [0,0,1,1] # 1,2,3
-
 for i in range(4,10**6+1):
     if i%2 == 0:
         temp1 = dp[int(i/2)] + 1
