@@ -143,3 +143,36 @@ else:
     elif test[0]%2 == 0 and test[1]%2 == 1:
         print(test[0]+1)
 
+######
+
+import sys
+input = sys.stdin.readline
+n,chick = map(int,input().split())
+box = [list(map(int,input().split())) for _ in range(n)]
+
+house = []
+chick_house = []
+
+def distance(chick_house,house_list):
+    a1,a2 = chick_house
+    length = []
+    for grid in house_list:
+        tp = abs(grid[0]-a1) + abs(grid[1]-a2)
+        length.append(tp)
+    return length
+
+for i in range(n):
+    for j in range(n):
+        if box[i][j] == 1:
+            house.append((i,j))
+        elif box[i][j] == 2:
+            chick_house.append((i,j))
+
+ans_list = [distance(i,house) for i in chick_house]
+ans = 0
+for i in range(len(house)):
+    tp = []
+    for j in range(len(chick_house)):
+        tp.append(ans_list[j][i])
+    ans += min(tp)
+print(ans)
