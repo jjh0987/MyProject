@@ -116,3 +116,37 @@ for col in col_set:
         except:
             pass
 print(cnt1,cnt2)
+
+
+
+
+import sys
+
+input = lambda : sys.stdin.readline().strip()
+
+n = int(input())
+graph = [list(input()) for _ in range(n)]
+
+def search(row):
+    idx = set()
+    for i in range(n):
+        if row[i] == 'R':
+            idx.add(i)
+            row[i] = 'G'
+            try:
+                if row[i+1] != 'R':
+                    continue
+            except:
+                break
+    return idx
+cnt1 = 0
+tp = [search(graph[i]) for i in range(n)]
+for i in range(n):
+    try:
+        if len(tp[i].intersection(tp[i+1])) != 0:
+            cnt1 += 1
+
+    except:
+        break
+
+
