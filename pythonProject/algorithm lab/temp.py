@@ -168,11 +168,37 @@ for i in range(n):
         elif box[i][j] == 2:
             chick_house.append((i,j))
 
-ans_list = [distance(i,house) for i in chick_house]
-ans = 0
-for i in range(len(house)):
-    tp = []
-    for j in range(len(chick_house)):
-        tp.append(ans_list[j][i])
-    ans += min(tp)
-print(ans)
+ans_tp_list = [distance(i,house) for i in chick_house]
+ans_list = []
+
+
+##################### 9251
+first = list(input())
+second = list(input())
+
+ans_list = []
+ans = ''
+marking = 0
+j = 0
+for i in range(len(first)):
+    for j in range(marking,len(second)):
+        if j == len(second)-1:
+            ans_list.append(ans)
+            continue
+        if first[i] == second[j]:
+            ans += first[i]
+            marking = j+1
+            break
+
+print(len(ans_list[-1]))
+
+
+
+N = input()
+M = list(input())
+from collections import deque
+
+ans = [0]*len(N)
+queue = deque(M)
+
+{i:N[i] for i in range(len(N))}.values()
