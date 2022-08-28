@@ -163,6 +163,42 @@ for i in range(n):
         elif box[i][j] == 2:
             chick_house.append((i,j))
 
+<<<<<<< HEAD
+ans_tp_list = [distance(i,house) for i in chick_house]
+ans_list = []
+
+
+##################### 9251
+first = list(input())
+second = list(input())
+
+ans_list = []
+ans = ''
+marking = 0
+j = 0
+for i in range(len(first)):
+    for j in range(marking,len(second)):
+        if j == len(second)-1:
+            ans_list.append(ans)
+            continue
+        if first[i] == second[j]:
+            ans += first[i]
+            marking = j+1
+            break
+
+print(len(ans_list[-1]))
+
+
+
+N = input()
+M = list(input())
+from collections import deque
+
+ans = [0]*len(N)
+queue = deque(M)
+
+{i:N[i] for i in range(len(N))}.values()
+=======
 from itertools import combinations
 result = 10**6
 for chi in combinations(chick_house, chick):
@@ -175,3 +211,4 @@ for chi in combinations(chick_house, chick):
     result = min(result, temp)
 
 print(result)
+>>>>>>> 5afa129d5086f1ae75f122f7c042a6ab57bf5eef
