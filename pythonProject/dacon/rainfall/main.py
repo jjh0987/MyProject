@@ -8,9 +8,9 @@ from scipy import interpolate
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, LSTM, GRU, AveragePooling1D, GlobalAveragePooling1D, Dropout, Conv1D
-w_list = sorted(glob("/Users/junho/Downloads/competition_data/water_data/*.csv"))
+w_list = sorted(glob("C:/Users/User/Downloads/competition_data/water_data/*.csv"))
 w_list
-r_list = sorted(glob("/Users/junho/Downloads/competition_data/rf_data/*.csv"))
+r_list = sorted(glob("C:/Users/User/Downloads/competition_data/rf_data/*.csv"))
 r_list
 
 # setting train
@@ -77,28 +77,30 @@ for j in tqdm(range(4032, len(tmp) - 432)):
 test_data = np.array(test_data)
 test_label = np.array(test_label)
 
-# setting model
-input_shape = (train_data[0].shape[0], train_data[0].shape[1])
-model = Sequential()
-model.add(AveragePooling1D(input_shape=input_shape))
-model.add(LSTM(256)) # input_shape=input_shape
-# model.add(GRU(32,return_sequences=False)) # input_shape=input_shape
-model.add(Dense(4, activation = 'relu'))
-
-optimizer = tf.optimizers.Adam(0.0005)
-model.compile(optimizer=optimizer,loss='mse', metrics=['mae'])
-model.fit(train_data, train_label, epochs=10, batch_size=128)
 
 
-pred = model.predict(test_data)
-
-pred = pd.DataFrame(pred)
-
-sample_submission = pd.read_csv("/Users/junho/Downloads/competition_data/sample_submission.csv")
-
-sample_submission["wl_1018662"] = pred[0]
-sample_submission["wl_1018680"] = pred[1]
-sample_submission["wl_1018683"] = pred[2]
-sample_submission["wl_1019630"] = pred[3]
-sample_submission.to_csv("/Users/junho/Downloads/competition_data/submission.csv", index = False)
-print(1)
+# # setting model
+# input_shape = (train_data[0].shape[0], train_data[0].shape[1])
+# model = Sequential()
+# model.add(AveragePooling1D(input_shape=input_shape))
+# model.add(LSTM(256)) # input_shape=input_shape
+# # model.add(GRU(32,return_sequences=False)) # input_shape=input_shape
+# model.add(Dense(4, activation = 'relu'))
+#
+# optimizer = tf.optimizers.Adam(0.0005)
+# model.compile(optimizer=optimizer,loss='mse', metrics=['mae'])
+# model.fit(train_data, train_label, epochs=10, batch_size=128)
+#
+#
+# pred = model.predict(test_data)
+#
+# pred = pd.DataFrame(pred)
+#
+# sample_submission = pd.read_csv("/Users/junho/Downloads/competition_data/sample_submission.csv")
+#
+# sample_submission["wl_1018662"] = pred[0]
+# sample_submission["wl_1018680"] = pred[1]
+# sample_submission["wl_1018683"] = pred[2]
+# sample_submission["wl_1019630"] = pred[3]
+# sample_submission.to_csv("/Users/junho/Downloads/competition_data/submission.csv", index = False)
+# print(1)
