@@ -56,3 +56,25 @@ def solution(p):
 solution(p)
 
 
+# import math
+# W,H = 8,12
+# box = math.gcd(W,H)
+#
+# sub_W = int(W/box)
+# sub_H = int(H/box)
+#
+# sub_W = min(sub_H,sub_W)
+# sub_H = max(sub_H,sub_W)
+#
+# blank = 0
+# cnt = 1
+# while 1:
+#     if sub_W >= 1 and sub_W < 2:
+#         blank += sub_H
+#         break
+#     else:
+#         sub_H = math.ceil(sub_H/2)
+#         sub_W = sub_W/2
+#         cnt += 1
+#
+# blank * cnt * box
