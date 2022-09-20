@@ -78,3 +78,27 @@ solution(p)
 #         cnt += 1
 #
 # blank * cnt * box
+import copy
+
+n = 5
+lost = [2,3]
+reverse = [3]
+reverse.sort()
+for i in reverse:
+    if i in lost:
+        lost.remove(i)
+        reverse.remove(i)
+reverse
+
+for i in range(len(reverse)):
+    try:
+        if reverse[i]-1 in lost:
+            lost.remove(reverse[i]-1)
+        elif reverse[i]+1 in lost:
+            lost.remove(reverse[i]+1)
+    except:
+        pass
+print(n-len(lost))
+
+reverse.pop(reverse.index(3))
+lost.pop(2)
