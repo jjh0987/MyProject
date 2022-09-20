@@ -78,3 +78,13 @@ solution(p)
 #         cnt += 1
 #
 # blank * cnt * box
+
+ability = [[40, 10, 10], [20, 5, 0], [30, 30, 30], [70, 0, 70], [100, 100, 100]]
+ans = []
+import itertools
+for i in list(itertools.permutations(range(len(ability[0])))):
+    tp = 0
+    for j in i:
+        tp += max([ability[k][j] for k in range(len(ability))])
+    ans.append(tp)
+ans
