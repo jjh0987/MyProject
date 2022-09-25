@@ -78,6 +78,18 @@ solution(p)
 #         cnt += 1
 #
 # blank * cnt * box
+<<<<<<< HEAD
+
+ability = [[40, 10, 10], [20, 5, 0], [30, 30, 30], [70, 0, 70], [100, 100, 100]]
+ans = []
+import itertools
+for i in list(itertools.permutations(range(len(ability[0])))):
+    tp = 0
+    for j in i:
+        tp += max([ability[k][j] for k in range(len(ability))])
+    ans.append(tp)
+ans
+=======
 import copy
 
 n = 5
@@ -102,3 +114,4 @@ print(n-len(lost))
 
 reverse.pop(reverse.index(3))
 lost.pop(2)
+>>>>>>> c4c9e352bc874ada7c8c5bd0fd5c6e7d7fb152e2

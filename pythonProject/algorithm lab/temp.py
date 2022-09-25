@@ -163,52 +163,94 @@ for i in range(n):
         elif box[i][j] == 2:
             chick_house.append((i,j))
 
-<<<<<<< HEAD
-ans_tp_list = [distance(i,house) for i in chick_house]
-ans_list = []
 
+import sys
+input = sys.stdin.readline
+n = int(input())
+m = int(input())
 
-##################### 9251
-first = list(input())
-second = list(input())
+mapping = [[0 for _ in range(n)] for _ in range(n)]
+for _ in range(m):
+    a,b,c = map(int,input().split())
+    mapping[a-1][b-1] += c
 
-ans_list = []
-ans = ''
-marking = 0
-j = 0
-for i in range(len(first)):
-    for j in range(marking,len(second)):
-        if j == len(second)-1:
-            ans_list.append(ans)
-            continue
-        if first[i] == second[j]:
-            ans += first[i]
-            marking = j+1
-            break
-
-print(len(ans_list[-1]))
+ans = [0] * n
 
 
 
-N = input()
-M = list(input())
-from collections import deque
+import sys
+input = sys.stdin.readline
+sys.setrecursionlimit(10**9)
+n = int(input())
 
-ans = [0]*len(N)
-queue = deque(M)
+Tree = [[] for _ in range(n+1)]
+Parents = [0 for _ in range(n+1)]
+for _ in range(n-1):
+    a,b = map(int, input().split())
+    Tree[a].append(b)
+    Tree[b].append(a)
 
-{i:N[i] for i in range(len(N))}.values()
-=======
-from itertools import combinations
-result = 10**6
-for chi in combinations(chick_house, chick):
-    temp = 0
-    for h in house:
-        chi_len = 105   # maximum
-        for j in range(chick):
-            chi_len = min(chi_len, abs(h[0] - chi[j][0]) + abs(h[1] - chi[j][1]))
-        temp += chi_len
-    result = min(result, temp)
+def sol(start,tree,parents):
+    for i in tree[start]:
+        if parents[i] == 0:
+            parents[i] = start
+            sol(i,tree,parents)
+# Parents
+# Tree
+sol(1,Tree,Parents)
+for i in range(2,n+1):
+    print(Parents[i])
 
-print(result)
->>>>>>> 5afa129d5086f1ae75f122f7c042a6ab57bf5eef
+
+import sys
+input = sys.stdin.readline
+sys.setrecursionlimit(10**9)
+n = int(input())
+# Tree = {'A': [], 'B': [], 'C': [], 'D': [], 'E': [], 'F': [], 'G': [], 'H': []
+#     , 'I': [], 'J': [], 'K': [], 'L': [], 'M': [], 'N': [], 'O': [], 'P': []
+#     , 'Q': [], 'R': [], 'S': [], 'T': [], 'U': [], 'V': [], 'W': [], 'X': []
+#     , 'Y': [], 'Z': []}
+
+from string import ascii_uppercase
+alpha = list(ascii_uppercase)
+Alpha = {}
+for i in range(1,len(alpha)+1):
+    Alpha[alpha[i-1]] = i
+
+Tree = [[] for _ in range(n+1)]
+Parents = [0 for _ in range(n+1)]
+
+Alpha_rev = {j:i for i,j in zip(Alpha.keys(),Alpha.values())}
+
+for i in range(1,n+1):
+    a,b,c = map(str, input().split())
+    if b != '.':
+        Tree[Alpha[a]].append(Alpha[b])
+    if c != '.':
+        Tree[Alpha[a]].append(Alpha[c])
+
+def copy_Tree(tree):
+    tp = []
+    for i in tree:
+        temp = []
+        for j in i:
+            temp.append(j)
+        tp.append(temp)
+    return tp
+
+
+def forward(start,tree,parents):
+    if Tree[start]:
+        tp = Tree[start].pop(0)
+        #parents[start] = tp
+        print(Alpha_rev[tp],end='')
+        forward(tp,tree,parents)
+
+t1 = copy_Tree(Tree)
+print(Alpha_rev[1],end='')
+for i in range(1,n+1):
+    for _ in range(2):
+        forward(i,t1,Parents)
+
+Parents
+Tree
