@@ -162,3 +162,95 @@ for i in range(n):
             house.append((i,j))
         elif box[i][j] == 2:
             chick_house.append((i,j))
+
+
+import sys
+input = sys.stdin.readline
+n = int(input())
+m = int(input())
+
+mapping = [[0 for _ in range(n)] for _ in range(n)]
+for _ in range(m):
+    a,b,c = map(int,input().split())
+    mapping[a-1][b-1] += c
+
+ans = [0] * n
+
+
+
+import sys
+input = sys.stdin.readline
+sys.setrecursionlimit(10**9)
+n = int(input())
+
+Tree = [[] for _ in range(n+1)]
+Parents = [0 for _ in range(n+1)]
+for _ in range(n-1):
+    a,b = map(int, input().split())
+    Tree[a].append(b)
+    Tree[b].append(a)
+
+def sol(start,tree,parents):
+    for i in tree[start]:
+        if parents[i] == 0:
+            parents[i] = start
+            sol(i,tree,parents)
+# Parents
+# Tree
+sol(1,Tree,Parents)
+for i in range(2,n+1):
+    print(Parents[i])
+
+
+import sys
+input = sys.stdin.readline
+sys.setrecursionlimit(10**9)
+n = int(input())
+# Tree = {'A': [], 'B': [], 'C': [], 'D': [], 'E': [], 'F': [], 'G': [], 'H': []
+#     , 'I': [], 'J': [], 'K': [], 'L': [], 'M': [], 'N': [], 'O': [], 'P': []
+#     , 'Q': [], 'R': [], 'S': [], 'T': [], 'U': [], 'V': [], 'W': [], 'X': []
+#     , 'Y': [], 'Z': []}
+
+from string import ascii_uppercase
+alpha = list(ascii_uppercase)
+Alpha = {}
+for i in range(1,len(alpha)+1):
+    Alpha[alpha[i-1]] = i
+
+Tree = [[] for _ in range(n+1)]
+Parents = [0 for _ in range(n+1)]
+
+Alpha_rev = {j:i for i,j in zip(Alpha.keys(),Alpha.values())}
+
+for i in range(1,n+1):
+    a,b,c = map(str, input().split())
+    if b != '.':
+        Tree[Alpha[a]].append(Alpha[b])
+    if c != '.':
+        Tree[Alpha[a]].append(Alpha[c])
+
+def copy_Tree(tree):
+    tp = []
+    for i in tree:
+        temp = []
+        for j in i:
+            temp.append(j)
+        tp.append(temp)
+    return tp
+
+
+def forward(start,tree,parents):
+    if Tree[start]:
+        tp = Tree[start].pop(0)
+        #parents[start] = tp
+        print(Alpha_rev[tp],end='')
+        forward(tp,tree,parents)
+
+t1 = copy_Tree(Tree)
+print(Alpha_rev[1],end='')
+for i in range(1,n+1):
+    for _ in range(2):
+        forward(i,t1,Parents)
+
+Parents
+Tree

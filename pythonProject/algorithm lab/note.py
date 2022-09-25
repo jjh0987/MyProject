@@ -100,3 +100,34 @@ while True:
         break
 
 print(len(answer))
+
+
+n = int(input())
+Tree = [[] for _ in range(n)]
+tar = list(map(int,input().split()))
+for i in range(len(tar)):
+    if tar[i] >= 0:
+        Tree[tar[i]].append(i)
+
+def sol(del_node,tree):
+    for i in tree:
+        if del_node in i:
+            tp = i.pop(i.index(del_node))
+            tpl = tree[tp]
+
+        try:
+            for j in tpl:
+                sol(j,tree)
+        except:pass
+
+def counting(confirm,tree):
+    for i in tree[confirm]:
+        pass
+
+erase = int(input())
+if erase == 0:
+    print(0)
+
+sol(erase,Tree)
+Tree
+        
