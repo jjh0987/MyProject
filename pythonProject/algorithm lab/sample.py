@@ -150,3 +150,39 @@ for i in range(n):
         break
 
 
+import sys
+sys.setrecursionlimit(10**6)
+input = sys.stdin.readline
+def dfs(x,y,color):
+    if x < 0 or y < 0 or x >= len(maps) or y >= len(maps[0]):
+        return False
+    if maps[x][y] == 1:
+        tp.append((x,y))
+        maps[x][y] = 'x'
+        dfs(x-1,y,color)
+        dfs(x,y-1,color)
+        dfs(x+1,y,color)
+        dfs(x,y+1,color)
+        dfs(x-1, y-1, color)
+        dfs(x+1, y-1, color)
+        dfs(x+1, y+1, color)
+        dfs(x-1, y+1, color)
+    return tp
+w = 1
+
+while w != 0:
+    island = []
+    tp = []
+    w,h = map(int,input().split())
+    maps = [list(map(int,input().split())) for _ in range(h)]
+    for i in range(h):
+        for j in range(w):
+            if maps[i][j] == 'x' or maps[i][j] == 0:
+                tp = []
+                continue
+            else:
+                island.append(dfs(i,j,1))
+    if w != 0:
+        print(len(island))
+    else:
+        pass
