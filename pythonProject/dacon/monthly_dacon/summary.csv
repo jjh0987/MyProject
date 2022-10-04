@@ -1,0 +1,8 @@
+,Method,Parms,Precision
+0,dtc,"[8, 6, 2, ['Volume', 'Open', 'High', 'Low']]",56.73
+1,logi,"[0, ['Volume', 'Open', 'High', 'Low']]",53.37
+2,knn,"[8, ['Volume', 'Open', 'High', 'Low']]",57.0
+3,vote,"[['Volume', 'Open', 'High', 'Low']]",52.42
+4,ranf,"[8, 1, 3, 30, ['Volume', 'Open', 'High', 'Low']]",55.8
+5,grad,"[9, 4, 9, 0.1, ['Volume', 'Open', 'High', 'Low']]",58.38
+6,xgb,"[['Volume', 'Open', 'High', 'Low']]",53.57
