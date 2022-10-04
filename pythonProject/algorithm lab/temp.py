@@ -1,5 +1,8 @@
 # 2564
 import sys
+
+import torch.cuda
+
 input = sys.stdin.readline
 box = list(map(int,input().split()))
 n = int(input())
@@ -254,3 +257,10 @@ for i in range(1,n+1):
 
 Parents
 Tree
+
+import sys
+input = sys.stdin.readline
+lst = [int(input()) for i in range(int(input()))]
+lst = sorted(lst,reverse=True)
+for i in lst:
+    print(i)
