@@ -112,3 +112,74 @@ print(n-len(lost))
 
 reverse.pop(reverse.index(3))
 lost.pop(2)
+
+
+cards = [8,6,3,7,2,5,1,4]
+ans = []
+
+
+for i in cards:
+    change = i
+    tp = []
+    while 1:
+        change = cards[change-1]
+        tp.append(change)
+        if i == change:
+            break
+    if sorted(tp) in ans:
+        pass
+    else:
+        ans.append(sorted(tp))
+
+ans = sorted([len(i) for i in ans])
+
+# 카운트다운
+target = 58
+
+single = [i for i in range(1,21)]
+double = [i*2 for i in range(1,21)]
+triple = [i*3 for i in range(1,21)]
+dt = set(double).union(set(triple))
+
+data = list(dt)
+tp = []
+for i in data:
+    if i > 20:
+        tp.append(i)
+dt = set(tp)
+dt
+
+ans = [0,0]
+while 1:
+    if target > 60:
+        target -= 60
+        ans[0] += 1
+        ans[1] += 1
+    else:
+        break
+
+while target:
+    if target > 20 and target in dt:
+        ans[0] += 1
+        break
+    elif target > 50 and target not in dt:
+        ans[0] += 1
+        ans[1] += 1
+        target -= 50
+    elif target > 20 and target not in dt:
+        ans[0] += 1
+        ans[1] += 1
+        target -= 20
+    elif target <= 20:
+        ans[0] += 1
+        ans[1] += 1
+        break
+
+ans
+
+
+2**20
+
+sorted(['3','30','34','5','9'],reverse=True)
+numbers = [3,30,34,5,9]
+''.join(sorted([str(i) for i in numbers],key=lambda x: x * 3,reverse=True))
