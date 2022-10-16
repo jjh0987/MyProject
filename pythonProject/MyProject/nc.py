@@ -15,10 +15,10 @@ for i in range(len(paper)):
         marking[i] += i+1
 
 marking
+
 # 2
 num = 5
 mark = [1,2,3,1] # 1,2,3,4 num
-
 cnt = 1
 start = mark[0]
 while cnt != num:
