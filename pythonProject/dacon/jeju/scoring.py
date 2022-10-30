@@ -134,7 +134,7 @@ def rf_speed(speed, train, test):
     vote = VotingRegressor([('r1', r1), ('r2', r2), ('r3', r3), ('r4',r4)])
 
     parms = {'verbose': [False]}
-    grid_cv = GridSearchCV(vote, param_grid=parms, cv=8, n_jobs=-1,
+    grid_cv = GridSearchCV(vote, param_grid=parms, cv=5, n_jobs=-1,
                            scoring='neg_mean_absolute_error')  # ,param_grid=parms
     grid_cv.fit(X_train, y_train)
 
