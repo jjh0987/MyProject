@@ -183,3 +183,26 @@ ans
 sorted(['3','30','34','5','9'],reverse=True)
 numbers = [3,30,34,5,9]
 ''.join(sorted([str(i) for i in numbers],key=lambda x: x * 3,reverse=True))
+
+import sys
+input = sys.stdin.readline
+
+def collatz(x):
+    if x == 1:
+        num.append(1)
+        return
+    if x % 2 == 0:
+        num.append(x)
+        collatz(x // 2)
+    else:
+        num.append(x)
+        collatz(3 * x + 1)
+
+a,b = map(int,input().split())
+num = []
+collatz(a)
+tp1 = num
+num = []
+collatz(b)
+tp2 = num
+
