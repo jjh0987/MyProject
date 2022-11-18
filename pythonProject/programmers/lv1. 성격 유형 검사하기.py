@@ -20,6 +20,7 @@ ans_dict = {'R':0,'T':0,
             'C':0,'F':0,
             'J':0,'M':0,
             'A':0,'N':0}
+
 for sur in survey_form.values():
     for s in sur:
         ans_dict[s] += sur[s]
