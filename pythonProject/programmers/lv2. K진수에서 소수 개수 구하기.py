@@ -1,5 +1,5 @@
 n = 110011
-k = 10
+k = 3
 
 import math
 def prime(x):
