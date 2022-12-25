@@ -1,15 +1,45 @@
 n = 2
+words = ['ac','ca','ac','ac']
+
+n = 2
 words = ["hello", "one", "even", "never", "now", "world", "draw"]
 
-people = list(range(1,n+1))
-cycle = 1
-ans = [0,0]
-for i in range(1,len(words)):
-    if words[i-1][-1] == words[i][0]:
-        cycle += 1
-    if cycle == n:
-        cycle = 0
-        ans[1] += 1
+import collections
+
+words = collections.deque(words)
+check = collections.deque()
+check.append(words.popleft())
+
+bag = set()
+cnt = 0
+flag = 0
+while check:
+    try:
+        check.append(words.popleft())
+    except:pass
+    pt = len(bag)
+    cnt += 1
+    if len(check) == 2:
+        if check[0][-1] != check[1][0]:
+            cnt += 1
+            flag = 1
+            break
+        for s in check:
+            if s in bag:
+                cnt += 1
+                flag = 1
+        if flag == 1:
+            break
+    bag.add(check.popleft())
+    if pt == len(bag):
+        flag = 1
+        break
+
+q,r = divmod(cnt,n)
+if r > 0:
+    q += 1
+elif r == 0:
+    r = n
 
 
-# [num,cycle]
+print([r,q])
