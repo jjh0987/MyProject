@@ -1,8 +1,6 @@
 n = 2
 words = ['ac','ca','ac','ac']
 
-n = 2
-words = ["hello", "one", "even", "never", "now", "world", "draw"]
 
 import collections
 
