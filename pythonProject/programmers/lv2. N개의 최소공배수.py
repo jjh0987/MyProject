@@ -1,5 +1,6 @@
-arr = [i for i in range(1,1001)]
+arr = [i for i in range(1,10001)]
 arr = list(set(arr))
+
 import math
 def prime(x):
     if x == 1:
@@ -12,7 +13,7 @@ def prime(x):
     return x
 
 nums = []
-for i in range(1,1001):
+for i in range(1,10001):
     if prime(i):
         nums.append(prime(i))
 
