@@ -65,3 +65,33 @@ for i in range(9,0,-1):
 
     if flag == 1:
         break
+
+
+
+priorities = [2, 1, 3, 2]
+location = 2
+
+
+import collections
+target = collections.deque()
+for i in range(len(priorities)):
+    target.append([i,priorities[i]])
+info = [location,priorities[location]]
+priorities = collections.Counter(priorities)
+
+
+cnt = 0
+flag = 0
+for i in sorted(priorities.keys(),reverse=True):
+    while priorities[i] > 0:
+        tar = target.popleft()
+        if tar[1] == i:
+            priorities[i] -= 1
+            cnt += 1
+            if tar[0] == info[0]:
+                flag = 1
+                break
+        else:
+            target.append(tar)
+    if flag == 1:
+        break
