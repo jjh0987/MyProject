@@ -1,9 +1,12 @@
 numbers = [1, 1, 1, 1, 1]
 target = 3
-cnt = 0
-def dfs(x):
-    global cnt
-    if x == target:
-        cnt += 1
-    else:
-        dfs(x)
+
+tar = [0]
+for i in numbers:
+    temp = []
+    for j in tar:
+        temp.append(j-i)
+        temp.append(j+i)
+    tar = temp
+
+tar.count(target)
