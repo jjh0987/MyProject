@@ -1,9 +1,9 @@
 dirs = "ULURRDLLU"
+dirs = "LULLLLLLU"
 
-route = [[5,5],[5,5]]
+node = [[5,5]]
 for d in dirs:
-    route.append(route[-1])
-    tar = route.pop()
+    tar = [i for i in node[-1]]
     if d == 'U':
         if tar[0] < 11:
             tar[0] += 1
@@ -16,8 +16,11 @@ for d in dirs:
     elif d == 'L':
         if tar[1] > 0:
             tar[1] -= 1
-    route.append([i for i in tar])
+    if tar == node[-1]:
+        continue
+    if tar in node:
+        node.append(1)
 
+    node.append(tar)
 
-box = [[0,0],[0,0]]
-grid = [[[i for i in box] for _ in range(10)] for _ in range(10)]
+node
