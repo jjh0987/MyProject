@@ -1,31 +1,28 @@
 n = 3
-network = [[1, 1, 0], [1, 1, 0], [0, 0, 1]]
-network = [[1, 1, 0], [1, 1, 1], [0, 1, 1]]
-ans = []
+network = [[1, 1, 0, 1], [1, 1, 0, 1], [0, 0, 1, 1], [1, 1, 1, 1]]
+network
+# network = [[1, 1, 0], [1, 1, 1], [0, 1, 1]]
+network = [[1,0,1],[0,1,0],[1,0,1]] # 양방향 필요
+# mapping = [[False for _ in range(n)] for _ in range(n)]
+answer = 0
+def dfs(x,y):
+    if x < 0 or y < 0 or x > n-1 or y > n-1:
+        return
+    if network[x][y] == -1:
+        return
+
+    if network[x][y] == 1:
+        network[x][y] = -1
+        dfs(x+1,y)
+        dfs(x,y+1)
+        dfs(x,y-1)
+        dfs(x-1,y)
+
+
 for i in range(n):
-    tp = set()
     for j in range(n):
         if network[i][j] == 1:
-            if i == j:
-                continue
-            if network[j][i] == 1:
-                tp.add(j)
-                tp.add(i)
-    ans.append(list(tp))
+            answer += 1
+            dfs(i,j)
 
-ans = {i:ans[i] for i in range(n)}
-answer = []
-mapping = [0]*n
-for i in ans:
-    mapping[i] = 1
-    tp = set()
-    for j in ans[i]:
-        tp.add(j)
-    answer.append(tp)
-
-
-    if mapping[j] == 1:
-        continue
-    if i in ans[j]:
-        mapping[j] = 1
-        answer += 1
+network
