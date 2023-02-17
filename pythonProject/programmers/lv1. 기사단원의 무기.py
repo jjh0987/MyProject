@@ -1,8 +1,23 @@
 number = 10
 limit = 3
 power = 2
-# 리밋을 넘어가면 파워로 대체
-# 약수의 개수표
+
+idx_table = [0 for i in range(number+1)]
+for j in range(1,number+1):
+    for i in range(j,number+1,j):
+        if i%j == 0:
+            idx_table[i] += 1
+answer = 0
+for i in idx_table:
+    if i > limit:
+        answer += power
+    else:
+        answer += i
+
+
+
+
+
 import math
 def prime(x):
     if x == 1:
@@ -14,27 +29,41 @@ def prime(x):
             return
     return x
 
-tp = [prime(i) for i in range(1,100001)]
 prime_table = []
-for i in tp:
-    if i:
-        prime_table.append(i)
+for i in range(1,100001):
+    tar = prime(i)
+    if tar:
+        prime_table.append(tar)
 
-ans = [1]
-for i in range(2,100001):
-    temp = 1
+prime_table
+
+# cut = [0]*len(prime_table)
+
+ans = []
+for i in range(2,number+1):
+    temp = []
     while i > 1:
         for j in prime_table:
-            if j > i:
+            if i < int(j/2)+1:
                 break
             if i%j == 0:
-                temp += 1
-                i /= int(j)
+                temp.append(j)
+                i = int(i/j)
+                break
     ans.append(temp)
 
+import collections
+table = [[j+1 for j in collections.Counter(i).values()] for i in ans]
 answer = []
-for i in ans[:number]:
+for i in table:
+    tp = 1
+    for j in i:
+        tp *= j
+    answer.append(tp)
+
+out = 1
+for i in answer:
     if i > limit:
-        answer.append(power)
+        out += power
     else:
-        answer.append(i)
+        out += i
