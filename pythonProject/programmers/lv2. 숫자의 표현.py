@@ -3,8 +3,8 @@ n = 15
 ans = 0
 s = [int(i*(i+1)/2) for i in range(n+1)]
 
-i = 0
-j = 0
+i = 0 # 큰수
+j = 0 # 작은수
 while i < n+1:
     if s[i]-s[j] < n:
         i += 1
