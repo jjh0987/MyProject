@@ -1,17 +1,16 @@
-n = 5
-l = 4
-r = 17
+n = 6
+l = 2000
+r = 3000
 
-i = 0
-start = '1'
-# 11011
-# 1101111011000001101111011
-mapping = {'0':'00000','1':'11011','11':'1101111011','1111':'11011110111101111011'}
+remain_1 = []
+remain_2 = []
 
-tp = ''
-while i < n:
-    tp = ''
-    for j in start.split('0'):
-        tp += mapping[j[0]]
-    start = tp
-    i += 1
+n -= 1
+l,q1 = divmod(l,5)
+r,q2 = divmod(r,5)
+remain_1.append([l,q1])
+remain_2.append([r,q2])
+
+5**6
+
+4*(5**4)
