@@ -13,5 +13,3 @@ for i in range(n,0,-1):
     answer.append(tar)
     k %= fact[i-2]
 
-answer
-fact
