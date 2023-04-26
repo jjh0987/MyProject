@@ -11,3 +11,14 @@ while s != '1':
         cnt2 += 1
 
 print(cnt2+1,cnt1)
+
+
+cnt1 = 0
+cnt2 = 0
+while s != '1':
+    cnt1 += len(s) - s.count('1')
+    s = ''.join(s.split('0'))
+    s = bin(len(s))[2:]
+    cnt2 += 1
+
+[cnt2,cnt1]

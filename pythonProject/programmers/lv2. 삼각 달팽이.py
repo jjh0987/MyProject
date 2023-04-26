@@ -18,10 +18,10 @@ while lv < 3:
     x += 1
     lv += 1
     mapping[0+2*x][0+x] = 1 + mapping[1+2*(x-1)][1+(x-1)]
+mapping
 
 
-
-n = 3
+n = 7
 mapping = [[0 for _ in range(n)] for _ in range(n)]
 
 i = 0
@@ -61,7 +61,7 @@ while lv < divmod(n,3)[0]+1:
             break
     i += 1
     lv += 1
-
+mapping
 answer = []
 for i in mapping:
     for j in i:
