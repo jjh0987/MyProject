@@ -58,3 +58,62 @@ def heap_sort(A):
 
 heap_sort(A)
 
+
+
+import sys
+import copy
+input = sys.stdin.readline
+n,k = map(int,input().split())
+A = [0]
+A.extend(list(map(int,input().split())))
+# A = list(map(int,input().split()))
+ans = 0
+cnt = copy.copy(k)
+def heapify(A,k,n):
+    global ans, cnt
+    left = 2*k
+    right = 2*k+1
+    if right <= n:
+        if A[left] < A[right]:
+            smaller = left
+        else:
+            smaller = right
+    elif left <= n:
+        smaller = left
+    else:
+        return True
+
+    if A[smaller] < A[k]:
+        A[k],A[smaller] = A[smaller],A[k]
+        heapify(A,smaller,n)
+
+    if ans == cnt:
+        print(A[k],A[smaller])
+
+def build_min_heap(A,n):
+    global ans, cnt
+    for i in range(n//2,0,-1):
+        ans += 1
+        heapify(A,i,n)
+
+def heap_sort(A):
+    global ans
+    n = len(A)-1
+    build_min_heap(A,n)
+    for i in range(n,1,-1):
+        if k == ans:
+            break
+        A[1],A[i] = A[i],A[1]
+        ans += 1
+        if k == ans:
+            print(A[i],A[1])
+        if k == ans:
+            break
+        else:
+            if heapify(A,1,i-1):
+                print(-1)
+                break
+            heapify(A,1,i-1)
+            ans += 1
+
+heap_sort(A)
