@@ -6,5 +6,4 @@ def solution(r1, r2):
     c1.extend(tp)
     c1 = [math.ceil(i) for i in c1]
     c2 = [math.floor(i) for i in c2]
-
     return sum([c2[i]-c1[i]+1 for i in range(len(c1))])*4
