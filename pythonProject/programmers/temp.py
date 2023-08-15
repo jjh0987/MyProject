@@ -220,3 +220,6 @@ for i in range(1,len(triangle)):
             dp[j] += max(triangle[i][j],triangle[i][j-1])
 
 
+
+import math
+math.gcd(*[2,4,6])
