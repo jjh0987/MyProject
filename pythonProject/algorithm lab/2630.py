@@ -1,18 +1,8 @@
+import sys
+input = sys.stdin.readline
+
 n = int(input())
-
-tar = '''1 1 0 0 0 0 1 1
-1 1 0 0 0 0 1 1
-0 0 0 0 1 1 0 0
-0 0 0 0 1 1 0 0
-1 0 0 0 1 1 1 1
-0 1 0 0 1 1 1 1
-0 0 1 1 1 1 1 1
-0 0 1 1 1 1 1 1'''.split('\n')
-tar = [[int(j) for j in i.split()] for i in tar]
-tar
-
-N = [1, 2, 4, 8, 16, 32, 64] # chopper
-N = [i for i in N if i < n]
+tar = [list(map(int,input().split())) for i in range(n)]
 
 def chopper(tar,chop_len):
     s1 = [i[:chop_len] for i in tar[:chop_len]]
@@ -40,17 +30,24 @@ blue = 0
 white = 0
 
 data = deque([tar])
-i = 0
-while n > 1:
-    n = n//2
-    while i < 2**i:
-        tar = data.popleft()
-        conf = only_num(tar)
-        if conf == 0:
-            data.extend(chopper(tar,n))
-        elif conf == 1:
+while data:
+    tar = data.popleft()
+    flag = only_num(tar)
+    if len(tar) == 1:
+        if tar[0][0] == 1:
             blue += 1
         else:
             white += 1
-    i += 1
-data
+    else:
+        if flag == 0:
+            try:
+                data.extend(chopper(tar,int(len(tar)/2)))
+            except:
+                pass
+        elif flag == 1:
+            blue += 1
+        else:
+            white += 1
+
+print(white)
+print(blue)
