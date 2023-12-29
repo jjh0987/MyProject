@@ -34,4 +34,4 @@ dfs(root)
 if root == erase:
     print(0)
 else:
-    print(answer) 
+    print(answer)
