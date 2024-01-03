@@ -32,3 +32,5 @@ while que:
             que.append(i)
 
 [print(answer[i] + tt[i]) for i in range(1, len(answer))]
+
+
