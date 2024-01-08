@@ -264,3 +264,51 @@ lst = [int(input()) for i in range(int(input()))]
 lst = sorted(lst,reverse=True)
 for i in lst:
     print(i)
+
+
+
+
+
+
+
+def correct(s):
+    s = [i for i in s]
+    stack = []
+    while s:
+        tar = s.pop()
+        stack.append(tar)
+        try:
+            if stack[-2] + stack[-1] in {')(', '}{', ']['}:
+                stack.pop()
+                stack.pop()
+        except:
+            pass
+
+    if stack:
+        return False
+    else:
+        return True
+
+import collections
+s = "[](){}"
+ans = 0
+que = collections.deque(list(s))
+que.append(que.popleft())
+
+for _ in range(len(s)):
+    if not correct(que):
+        que.append(que.popleft())
+    else:
+        s = ''.join(que)
+        for _ in range(int(len(s)/2)):
+            if not s:
+                break
+            s = s.replace('()','')
+            s = s.replace('[]', '')
+            s = s.replace('{}', '')
+            ans += 1
+        break
+if ans == len(s):
+    print(0)
+
+s.count('()')
