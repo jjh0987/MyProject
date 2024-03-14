@@ -18,4 +18,4 @@ for _ in range(n):
         if tar - fibo[-i] >= 0:
             tp.append(fibo[-i])
             tar = tar - fibo[-i]
-    print(*sorted(tp))                    
+    print(*sorted(tp))
