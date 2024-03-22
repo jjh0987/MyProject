@@ -1,16 +1,29 @@
+import sys
+input = sys.stdin.readline
 n = int(input())
-tar = [int(i) for i in input().split()]
-s = 0
-e = len(tar)-1
+arr = list(map(int,input().split()))
+i = 0
+j = n-1
+arr.sort()
 
-while 1:
-    if tar[0] > 0:
-        break
-    elif tar[len(tar)-1] < 0:
-        break
+ans = 2*(10**10)+7
+answer = [0,0]
+while i < j:
+    tp = arr[i] + arr[j]
+    if tp < 0:
+        ans = min(ans,abs(tp))
+        if ans >= abs(tp):
+            answer[0] = arr[i]
+            answer[1] = arr[j]
+        i += 1
+    elif tp > 0:
+        ans = min(ans,abs(tp))
+        if ans >= abs(tp):
+            answer[0] = arr[i]
+            answer[1] = arr[j]
+        j -= 1
     else:
-        check = tar[s]+tar[e]
-        if check > 0:
-            s += 1
-        elif check < 0:
-            e -= 1
+        answer[0] = arr[i]
+        answer[1] = arr[j]
+        break
+print(*answer)              
