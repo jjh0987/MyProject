@@ -4,9 +4,7 @@ n,k = map(int,input().split())
 jem = []
 bag = []
 import heapq
-import collections
 heapq.heapify(jem)
-
 for _ in range(n):
     m,v = map(int,input().split())
     heapq.heappush(jem,[m,-v])
