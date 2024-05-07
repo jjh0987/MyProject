@@ -5,7 +5,7 @@ n,k = map(int,input().split())
 h = []
 for i in range(n):
     w,v = map(int,input().split())
-    h.append([w,-v,i])
+    h.append([w,-v])
 
 import heapq
 heapq.heapify(h)
@@ -42,14 +42,38 @@ print(max(ans))
 import sys
 input = sys.stdin.readline
 n,k = map(int,input().split())
-dp = [0 for _ in range(100001*2)]
-bag = []
+dp = [0 for _ in range(100001)]
+wkey = set()
 for _ in range(n):
     w,v = map(int,input().split())
-    bag.append([w,v])
+    wkey.add(w)
     if dp[w] > 0:
-        dp[w] = max(dp[m],v)
+        dp[w] = max(dp[w],v)
     else:
         dp[w] = v
 
+for i in range(len(wkey)):
+    wkey = list(set(wkey))
+    wkey.sort()
+    for j in range(i,len(wkey)):
+        if i == j:
+            continue
+        w1 = wkey[i]
+        w2 = wkey[j]
+        if w1+w2 > k:
+            continue
+        dp[w1+w2] = max(dp[w1+w2],dp[w1]+dp[w2])
+        wkey.append(w1+w2)
+print(dp[k])
+
+
+
+import sys
+input = sys.stdin.readline
+n,k = map(int,input().split())
+dp = [[0 for i in range(101)] for _ in range(100001)]
+h = []
+for i in range(n):
+    w,v = map(int,input().split())
+    h.append([w,v])
 
