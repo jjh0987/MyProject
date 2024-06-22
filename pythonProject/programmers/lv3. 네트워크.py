@@ -1,28 +1,18 @@
-n = 3
-network = [[1, 1, 0, 1], [1, 1, 0, 1], [0, 0, 1, 1], [1, 1, 1, 1]]
-network
-# network = [[1, 1, 0], [1, 1, 1], [0, 1, 1]]
-network = [[1,0,1],[0,1,0],[1,0,1]] # 양방향 필요
-# mapping = [[False for _ in range(n)] for _ in range(n)]
-answer = 0
-def dfs(x,y):
-    if x < 0 or y < 0 or x > n-1 or y > n-1:
-        return
-    if network[x][y] == -1:
-        return
+def solution(n, network):
+    visited = [False for _ in range(n)]
+    import collections
+    que = collections.deque()
+    answer = 0
+    for i in range(n):
+        if visited[i]:
+            continue
+        que.append(i)
+        while que:
+            s = que.popleft()
+            visited[s] = True
+            for e in range(n):
+                if not visited[e] and network[s][e] == 1:
+                    que.append(e)
+        answer += 1
 
-    if network[x][y] == 1:
-        network[x][y] = -1
-        dfs(x+1,y)
-        dfs(x,y+1)
-        dfs(x,y-1)
-        dfs(x-1,y)
-
-
-for i in range(n):
-    for j in range(n):
-        if network[i][j] == 1:
-            answer += 1
-            dfs(i,j)
-
-network
+    return answer
