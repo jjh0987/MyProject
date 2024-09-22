@@ -3,15 +3,14 @@ import sys
 input = sys.stdin.readline
 n, m = map(int, input().split())
 tree = list(map(int, input().split()))
+
 s = 1
 e = max(tree)
-while 1:
+while s <= e:
     mid = (s + e) // 2
-    check = 0
+    check = sum([i-mid for i in tree if i-mid > 0])
     if check < m:
         e = int(mid) - 1
-    elif check > m:
-        s = int(mid) + 1
     else:
-        print(mid)
-        break
+        s = int(mid) + 1
+print(e)

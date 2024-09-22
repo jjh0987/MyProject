@@ -1,0 +1,5 @@
+k = int(input())
+tar = str(bin(k+1)[3:])
+tar = tar.replace('0','4')
+tar = tar.replace('1','7')
+print(tar)
