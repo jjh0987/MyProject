@@ -10,4 +10,4 @@ for _ in range(T):
     for i in ants:
         m = max(m,min(i,l-i))
         M = max(M,max(i,l-i))
-    print(m,M)          
+    print(m,M)
